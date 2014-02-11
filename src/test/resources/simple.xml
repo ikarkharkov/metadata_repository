@@ -1,0 +1,33 @@
+<?xml?>
+<repo>
+    <model id="1" type="database" name="ODS">
+        <schema id="2" name="s">
+            <table id="3" name="t">
+                <column id="4" name="c" type="string">
+                </column>
+            </table>
+        </schema>
+    </model>
+    <mapping id="1" name="ODS to DW">
+        <connection id="2" name="ODS" type="source">
+            <schema id="3" name="s">
+                <table id="4" name="t">
+                    <column id="5" name="c"/>
+                </table>
+                <table id="10" name="w">
+                    <column id="11" name="e"/>
+                </table>
+            </schema>
+        </connection>
+        <connection id="6" name="DW" type="target">
+            <schema id="7" name="s1">
+                <table id="8" name="t1">
+                    <column id="9" name="c1" formula="c+d">
+                        <source idref="5"/>
+                        <source idref="11"/>
+                    </column>
+                </table>
+            </schema>
+        </connection>
+    </mapping>
+</repo>

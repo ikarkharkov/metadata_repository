@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repo>
+    <model id="1" type="database" name="ODS">
+        <schema id="11" name="s">
+            <table id="111" name="t">
+                <column id="11155" name="c" type="string"/>
+            </table>
+            <table id="112" name="w">
+                <column id="1121" name="e"/>
+            </table>
+        </schema>
+    </model>
+</repo>

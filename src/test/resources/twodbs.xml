@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repo>
+    <model id="1" type="database" name="ODS">
+        <schema id="11" name="s">
+            <table id="111" name="t">
+                <column id="11155" name="c" type="string"/>
+            </table>
+            <table id="112" name="w">
+                <column id="1121" name="e"/>
+            </table>
+        </schema>
+    </model>
+    <model id="2" type="database" name="DW">
+        <schema id="21" name="s1">
+            <table id="211" name="t1">
+                <column id="2111" name="c1"/>
+            </table>
+        </schema>
+    </model>
+</repo>
