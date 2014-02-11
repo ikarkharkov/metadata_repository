@@ -1,30 +1,41 @@
 <?xml?>
 <repo>
     <model id="1" type="database" name="ODS">
-        <schema id="2" name="s">
-            <table id="3" name="t">
-                <column id="4" name="c" type="string">
+        <schema id="11" name="s">
+            <table id="111" name="t">
+                <column id="1111" name="c" type="string">
+                </column>
+            </table>
+            <table id="112" name="w">
+                <column id="1121" name="d" type="string">
                 </column>
             </table>
         </schema>
     </model>
+    <model id="2" type="database" name="DW">
+        <schema id="21" name="s1">
+            <table id="211" name="t1">
+                <column id="2111" name="c1" type="string"/>
+            </table>
+        </schema>
+    </model>
     <mapping id="1" name="ODS to DW">
-        <connection id="2" name="ODS" type="source">
-            <schema id="3" name="s">
-                <table id="4" name="t">
-                    <column id="5" name="c"/>
+        <connection id="11" name="ODS" type="source">
+            <schema id="1110" name="s">
+                <table id="111" name="t">
+                    <column id="1111" name="c"/>
                 </table>
-                <table id="10" name="w">
-                    <column id="11" name="e"/>
+                <table id="112" name="w">
+                    <column id="1121" name="e"/>
                 </table>
             </schema>
         </connection>
-        <connection id="6" name="DW" type="target">
-            <schema id="7" name="s1">
-                <table id="8" name="t1">
-                    <column id="9" name="c1" formula="c+d">
-                        <source idref="5"/>
-                        <source idref="11"/>
+        <connection id="12" name="DW" type="target">
+            <schema id="21" name="s1">
+                <table id="211" name="t1">
+                    <column id="2111" name="c1" formula="c+d">
+                        <source idref="1111"/>
+                        <source idref="1121"/>
                     </column>
                 </table>
             </schema>
