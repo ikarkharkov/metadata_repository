@@ -1,0 +1,1 @@
+Feb 12. - 2 hours. Initial project setup, environment configuration (DB, Maven, Idea), specification review, sample files preparation.
