@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repo>
+    <model id="1" type="database" name="test">
+        <schema id="2" name="schema">
+            <table id="3" name="table">
+                <column id="4" name="column" type="string"/>
+            </table>
+        </schema>
+    </model>
+</repo>

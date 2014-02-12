@@ -5,7 +5,7 @@ import com.chystopo.metarepository.bean.Item;
 import java.io.InputStream;
 import java.util.Collection;
 
-public interface Repository {
+public interface IRepository {
 
     void load(InputStream is);
 
