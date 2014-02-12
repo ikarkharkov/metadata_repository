@@ -59,6 +59,11 @@
             <version>1.2.17</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.1.1</version>
+        </dependency>
 
         <!--test-->
         <dependency>
@@ -83,4 +88,25 @@
         </dependency>
 
     </dependencies>
+
+    <!-- <build>
+         <plugins>
+             <plugin>
+                 <groupId>org.liquibase</groupId>
+                 <artifactId>liquibase-maven-plugin</artifactId>
+                 <version>3.1.1</version>
+                 <configuration>
+                     <propertyFile>src/main/resources/db/liquibase.properties</propertyFile>
+                 </configuration>
+                 <executions>
+                     <execution>
+                         <phase>process-resources</phase>
+                         <goals>
+                             <goal>update</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>-->
 </project>
