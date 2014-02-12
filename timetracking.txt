@@ -1,1 +1,3 @@
-Feb 12. - 2 hours. Initial project setup, environment configuration (DB, Maven, Idea), specification review, sample files preparation.
+Feb 12. - 2 hours. Initial project setup, environment configuration (DB, Maven, Idea),
+                   specification review, sample files preparation.
+Feb 13. - 3 hours. Implemented parsing of Model section of XML. Added Liquibase for DB refactoring.
