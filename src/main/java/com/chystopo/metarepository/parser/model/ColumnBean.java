@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlType(name = "column")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -13,6 +15,11 @@ public class ColumnBean extends ItemBean {
 
     @XmlAttribute
     private String type;
+
+    @XmlAttribute
+    private String formula;
+
+    private List<SourceBean> sources = new ArrayList<SourceBean>();
 
     public String getType() {
         return type;
@@ -22,12 +29,34 @@ public class ColumnBean extends ItemBean {
         this.type = type;
     }
 
+    public String getFormula() {
+        return formula;
+    }
+
+    public void setFormula(String formula) {
+        this.formula = formula;
+    }
+
+    public List<SourceBean> getSources() {
+        return sources;
+    }
+
+    public void setSources(List<SourceBean> sources) {
+        this.sources = sources;
+    }
+
     public Column toEntity() {
         Column column = new Column();
         column.setId(getId());
         column.setName(getName());
         column.setType(getType());
+        column.setFormula(getFormula());
+        List<Long> sources = new ArrayList<Long>();
 
+        for (SourceBean sourceBean : getSources()) {
+            sources.add(sourceBean.getIdref());
+        }
+        column.setSources(sources);
         return column;
     }
 }

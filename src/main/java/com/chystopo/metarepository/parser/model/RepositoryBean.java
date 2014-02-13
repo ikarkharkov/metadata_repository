@@ -14,11 +14,22 @@ public class RepositoryBean {
     @XmlElement(name = "model")
     private List<ModelBean> models = new ArrayList<ModelBean>();
 
+    @XmlElement(name = "mapping")
+    private List<MappingBean> mappings = new ArrayList<MappingBean>();
+
     public List<ModelBean> getModels() {
         return models;
     }
 
     public void setModels(List<ModelBean> models) {
         this.models = models;
+    }
+
+    public List<MappingBean> getMappings() {
+        return mappings;
+    }
+
+    public void setMappings(List<MappingBean> mappings) {
+        this.mappings = mappings;
     }
 }

@@ -1,8 +1,9 @@
 package com.chystopo.metarepository.parser;
 
 import com.chystopo.metarepository.IParser;
-import com.chystopo.metarepository.bean.Connection;
+import com.chystopo.metarepository.bean.Mapping;
 import com.chystopo.metarepository.bean.Model;
+import com.chystopo.metarepository.parser.model.MappingBean;
 import com.chystopo.metarepository.parser.model.ModelBean;
 import com.chystopo.metarepository.parser.model.RepositoryBean;
 import org.slf4j.Logger;
@@ -34,13 +35,16 @@ public class Parser implements IParser {
         }
 
         List<Model> models = new ArrayList<Model>();
-        List<Connection> connections = new ArrayList<Connection>();
-        for (ModelBean modelBean : repository.getModels()) {
-            Model model = modelBean.toEntity();
 
-            models.add(model);
+        for (ModelBean modelBean : repository.getModels()) {
+            models.add(modelBean.toEntity());
         }
-        return new Repo(models, connections);
+
+        List<Mapping> mappings = new ArrayList<Mapping>();
+        for (MappingBean mappingBean : repository.getMappings()) {
+            mappings.add(mappingBean.toEntity());
+        }
+        return new Repo(models, mappings);
     }
 
     private String pojo2Xml(Object object, JAXBContext context)

@@ -29,7 +29,7 @@ public class Repository implements IRepository {
         LOG.debug("someone tries to upload data");
         Repo repo = parser.parse(is);
         storage.saveOrUpdate(repo.getModels());
-        storage.saveOrUpdate(repo.getConnections());
+//        storage.saveOrUpdate(repo.getConnections());
     }
 
     @Override

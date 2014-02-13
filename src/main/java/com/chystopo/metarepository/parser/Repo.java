@@ -1,24 +1,24 @@
 package com.chystopo.metarepository.parser;
 
-import com.chystopo.metarepository.bean.Connection;
+import com.chystopo.metarepository.bean.Mapping;
 import com.chystopo.metarepository.bean.Model;
 
 import java.util.List;
 
 public class Repo {
     private List<Model> models;
-    private List<Connection> connections;
+    private List<Mapping> mappings;
 
-    public Repo(List<Model> models, List<Connection> connections) {
+    public Repo(List<Model> models, List<Mapping> mappings) {
         this.models = models;
-        this.connections = connections;
+        this.mappings = mappings;
     }
 
     public List<Model> getModels() {
         return models;
     }
 
-    public List<Connection> getConnections() {
-        return connections;
+    public List<Mapping> getMappings() {
+        return mappings;
     }
 }

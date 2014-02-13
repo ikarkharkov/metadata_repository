@@ -1,9 +1,6 @@
 package com.chystopo.metarepository;
 
-import com.chystopo.metarepository.bean.Column;
-import com.chystopo.metarepository.bean.Model;
-import com.chystopo.metarepository.bean.Schema;
-import com.chystopo.metarepository.bean.Table;
+import com.chystopo.metarepository.bean.*;
 import com.chystopo.metarepository.parser.Repo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +47,26 @@ public class ParserTest {
         Repo repo = parseFile("data/simple.xml");
 
         assertEquals(2, repo.getModels().size());
+        assertEquals(1, repo.getMappings().size());
+
+        Mapping mapping = repo.getMappings().get(0);
+
+        Connection source = mapping.getConnections().get(0);
+        assertEquals("source", source.getType());
+
+        Schema sourceSchema = source.getSchemas().get(0);
+        Table sourceTable = sourceSchema.getTables().get(0);
+        Column sourceColumn = sourceTable.getColumns().get(0);
+        assertEquals(1111L, sourceColumn.getId().longValue());
+
+        Connection target = mapping.getConnections().get(1);
+        assertEquals("target", target.getType());
+
+        Schema targetSchema = target.getSchemas().get(0);
+        Table targetTable = targetSchema.getTables().get(0);
+        Column targetColumn = targetTable.getColumns().get(0);
+        assertEquals(2111L, targetColumn.getId().longValue());
+        assertEquals("c+d", targetColumn.getFormula());
     }
 
     private Repo parseFile(String fileName) {
