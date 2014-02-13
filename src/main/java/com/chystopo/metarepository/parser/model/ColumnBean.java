@@ -1,6 +1,7 @@
 package com.chystopo.metarepository.parser.model;
 
 import com.chystopo.metarepository.bean.Column;
+import com.chystopo.metarepository.bean.Item;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,8 +46,10 @@ public class ColumnBean extends ItemBean {
         this.sources = sources;
     }
 
-    public Column toEntity() {
+    @Override
+    public Column toEntity(Item parent) {
         Column column = new Column();
+        column.setParent(parent);
         column.setId(getId());
         column.setName(getName());
         column.setType(getType());

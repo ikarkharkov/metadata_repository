@@ -1,5 +1,7 @@
 package com.chystopo.metarepository.parser.model;
 
+import com.chystopo.metarepository.bean.Item;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -7,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ItemBean {
+public abstract class ItemBean {
     @XmlAttribute
     private Long id;
 
@@ -29,4 +31,6 @@ public class ItemBean {
     public void setName(String name) {
         this.name = name;
     }
+
+    public abstract Item toEntity(Item parent);
 }

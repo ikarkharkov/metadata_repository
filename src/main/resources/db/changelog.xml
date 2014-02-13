@@ -3,11 +3,16 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet id="1" author="oleksiy">
-        <comment>A sample change log</comment>
+    <changeSet id="1" author="oleksiy" dbms="postgresql">
         <createTable tableName="model">
-            <column name="id" type="INT"/>
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="model_pk"/>
+            </column>
+            <column name="entity_type" type="varchar"/>
             <column name="name" type="varchar"/>
+            <column name="type" type="varchar"/>
+            <column name="formula" type="varchar"/>
+            <column name="parent_id" type="int"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

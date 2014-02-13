@@ -2,7 +2,7 @@ package com.chystopo.metarepository.bean;
 
 import java.util.List;
 
-public class Connection extends Item {
+public class Connection extends Item implements Branch {
     private List<Schema> schemas;
     private String type;
 
@@ -20,5 +20,10 @@ public class Connection extends Item {
 
     public String getType() {
         return type;
+    }
+
+    @Override
+    public List<? extends Item> getChildren() {
+        return getSchemas();
     }
 }

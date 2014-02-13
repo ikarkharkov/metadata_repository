@@ -1,5 +1,6 @@
 package com.chystopo.metarepository.parser.model;
 
+import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Schema;
 import com.chystopo.metarepository.bean.Table;
 
@@ -25,13 +26,15 @@ public class SchemaBean extends ItemBean {
         this.tables = tables;
     }
 
-    public Schema toEntity() {
+    @Override
+    public Schema toEntity(Item parent) {
         Schema schema = new Schema();
         schema.setId(getId());
         schema.setName(getName());
+        schema.setParent(parent);
         List<Table> tables = new ArrayList<Table>();
         for (TableBean tableBean : getTables()) {
-            tables.add(tableBean.toEntity());
+            tables.add(tableBean.toEntity(schema));
         }
         schema.setTables(tables);
         return schema;

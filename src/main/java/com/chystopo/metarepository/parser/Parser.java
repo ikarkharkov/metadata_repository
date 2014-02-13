@@ -25,7 +25,7 @@ public class Parser implements IParser {
     @Override
     public Repo parse(InputStream inputStream) {
         Parser jaxbConverter = new Parser();
-        RepositoryBean repository = null;
+        RepositoryBean repository;
         try {
             JAXBContext context = JAXBContext.newInstance(RepositoryBean.class);
             repository = jaxbConverter.xml2Pojo(inputStream, context);
@@ -37,12 +37,12 @@ public class Parser implements IParser {
         List<Model> models = new ArrayList<Model>();
 
         for (ModelBean modelBean : repository.getModels()) {
-            models.add(modelBean.toEntity());
+            models.add(modelBean.toEntity(null));
         }
 
         List<Mapping> mappings = new ArrayList<Mapping>();
         for (MappingBean mappingBean : repository.getMappings()) {
-            mappings.add(mappingBean.toEntity());
+            mappings.add(mappingBean.toEntity(null));
         }
         return new Repo(models, mappings);
     }

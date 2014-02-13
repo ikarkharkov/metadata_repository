@@ -1,6 +1,7 @@
 package com.chystopo.metarepository.parser.model;
 
 import com.chystopo.metarepository.bean.Column;
+import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Table;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,13 +26,15 @@ public class TableBean extends ItemBean {
         this.columns = columns;
     }
 
-    public Table toEntity() {
+    @Override
+    public Table toEntity(Item parent) {
         Table table = new Table();
+        table.setParent(parent);
         table.setId(getId());
         table.setName(getName());
         List<Column> columns = new ArrayList<Column>();
         for (ColumnBean columnBean : getColumns()) {
-            columns.add(columnBean.toEntity());
+            columns.add(columnBean.toEntity(table));
         }
         table.setColumns(columns);
         return table;

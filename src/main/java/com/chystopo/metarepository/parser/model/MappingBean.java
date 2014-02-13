@@ -2,6 +2,7 @@ package com.chystopo.metarepository.parser.model;
 
 
 import com.chystopo.metarepository.bean.Connection;
+import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Mapping;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,14 +26,15 @@ public class MappingBean extends ItemBean {
         this.connections = connections;
     }
 
-    public Mapping toEntity() {
+    @Override
+    public Mapping toEntity(Item parent) {
         Mapping result = new Mapping();
         result.setId(getId());
         result.setName(getName());
 
         List<Connection> connections = new ArrayList<Connection>();
         for (ConnectionBean connectionBean : getConnections()) {
-            connections.add(connectionBean.toEntity());
+            connections.add(connectionBean.toEntity(result));
         }
         result.setConnections(connections);
 

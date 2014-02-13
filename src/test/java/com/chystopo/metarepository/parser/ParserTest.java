@@ -1,7 +1,7 @@
-package com.chystopo.metarepository;
+package com.chystopo.metarepository.parser;
 
+import com.chystopo.metarepository.IParser;
 import com.chystopo.metarepository.bean.*;
-import com.chystopo.metarepository.parser.Repo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

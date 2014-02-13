@@ -1,13 +1,26 @@
 package com.chystopo.metarepository;
 
-import com.chystopo.metarepository.bean.Item;
+import com.chystopo.metarepository.bean.*;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IModelStorage {
-    void saveOrUpdate(Item item);
+    Column saveOrUpdate(Column item);
 
-    Item findById(Long id);
+    Table saveOrUpdate(Table item);
 
-    void saveOrUpdate(List<? extends Item> items);
+    Schema saveOrUpdate(Schema item);
+
+    Model saveOrUpdate(Model item);
+
+    Item findById(ItemType type, Long id);
+
+    Column findColumnById(Long id);
+
+    Table findTableById(Long id);
+
+    void saveOrUpdate(List<Model> models);
+
+    Collection<Item> findChildren(Item item);
 }

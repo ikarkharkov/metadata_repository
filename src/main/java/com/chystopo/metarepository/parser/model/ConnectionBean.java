@@ -1,6 +1,7 @@
 package com.chystopo.metarepository.parser.model;
 
 import com.chystopo.metarepository.bean.Connection;
+import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Schema;
 
 import javax.xml.bind.annotation.*;
@@ -34,14 +35,15 @@ public class ConnectionBean extends ItemBean {
         this.schemas = schemas;
     }
 
-    public Connection toEntity() {
+    public Connection toEntity(Item parent) {
         Connection connection = new Connection();
         connection.setId(getId());
         connection.setName(getName());
         connection.setType(getType());
+        connection.setParent(parent);
         List<Schema> schemas = new ArrayList<Schema>();
         for (SchemaBean schemaBean : getSchemas()) {
-            schemas.add(schemaBean.toEntity());
+            schemas.add(schemaBean.toEntity(connection));
         }
         connection.setSchemas(schemas);
         return connection;

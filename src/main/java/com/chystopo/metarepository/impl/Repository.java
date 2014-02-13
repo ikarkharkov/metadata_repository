@@ -26,15 +26,14 @@ public class Repository implements IRepository {
 
     @Override
     public void load(InputStream is) {
-        LOG.debug("someone tries to upload data");
         Repo repo = parser.parse(is);
         storage.saveOrUpdate(repo.getModels());
 //        storage.saveOrUpdate(repo.getConnections());
     }
 
     @Override
-    public Collection<Item> findChildren(Item parent) {
-        return null;
+    public Collection<Item> findChildren(Item item) {
+        return storage.findChildren(item);
     }
 
     @Override
