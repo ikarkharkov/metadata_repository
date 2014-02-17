@@ -13,77 +13,65 @@ import java.util.List;
 
 @Component
 @Transactional
-public class ModelStorage implements IModelStorage {
+public class Storage implements IModelStorage {
 
     private JdbcTemplate jdbcTemplate;
-    private Saver saver;
-    private Updater updater;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        saver = new Saver(jdbcTemplate);
-        updater = new Updater(jdbcTemplate);
     }
 
     @Override
     public Column saveOrUpdate(Column item) {
-        if (item.getId() == null)
-            saver.save(item);
-        else
-            updater.update(item);
-
-        return item;
+        return new ColumnHelper(jdbcTemplate).save(item);
     }
 
     @Override
     public Table saveOrUpdate(Table item) {
-        if (item.getId() == null)
-            saver.save(item);
-        else
-            updater.update(item);
-
-        return item;
+        return new TableHelper(jdbcTemplate).save(item);
     }
 
     @Override
     public Schema saveOrUpdate(Schema item) {
-        if (item.getId() == null)
-            saver.save(item);
-        else
-            updater.update(item);
-
-        return item;
+        return new SchemaHelper(jdbcTemplate).save(item);
     }
 
     @Override
     public Model saveOrUpdate(Model item) {
-        if (item.getId() == null)
-            saver.save(item);
-        else
-            updater.update(item);
-
-        return item;
+        return new ModelHelper(jdbcTemplate).save(item);
     }
 
     @Override
-    public Item findById(ItemType type, Long id) {
+    public Item findById(ItemType type, Long publicId) {
         return null;
     }
 
     @Override
     public Column findColumnById(Long id) {
-        return null;
+        return new ColumnHelper(jdbcTemplate).find(id);
     }
 
     @Override
     public Table findTableById(Long id) {
-        return null;
+        return new TableHelper(jdbcTemplate).find(id);
+    }
+
+    @Override
+    public Schema findSchemaById(Long id) {
+        return new SchemaHelper(jdbcTemplate).find(id);
+    }
+
+    @Override
+    public Model findModelById(Long id) {
+        return new ModelHelper(jdbcTemplate).find(id);
     }
 
     @Override
     public void saveOrUpdate(List<Model> models) {
-
+        for (Model model : models) {
+            saveOrUpdate(model);
+        }
     }
 
     @Override

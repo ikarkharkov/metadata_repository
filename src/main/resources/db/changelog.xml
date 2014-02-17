@@ -4,15 +4,49 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet id="1" author="oleksiy" dbms="postgresql">
-        <createTable tableName="model">
+        <createTable tableName="basic_entity">
             <column name="id" type="SERIAL">
-                <constraints primaryKey="true" primaryKeyName="model_pk"/>
+                <constraints primaryKey="true" primaryKeyName="basic_entity_pk"/>
             </column>
+            <column name="context" type="varchar"/>
+            <column name="public_id" type="int"/>
+            <column name="parent_id" type="int"/>
+            <column name="path" type="varchar"/>
             <column name="entity_type" type="varchar"/>
             <column name="name" type="varchar"/>
-            <column name="type" type="varchar"/>
+        </createTable>
+        <createTable tableName="columns">
+            <column name="id" type="int">
+                <constraints primaryKey="true" primaryKeyName="columns_pk" references="basic_entity(id)"
+                             foreignKeyName="columns_basic_entity_fk"/>
+            </column>
+            <column name="column_type" type="varchar"/>
             <column name="formula" type="varchar"/>
-            <column name="parent_id" type="int"/>
+        </createTable>
+        <createTable tableName="tables">
+            <column name="id" type="int">
+                <constraints primaryKey="true" primaryKeyName="tables_pk" references="basic_entity(id)"
+                             foreignKeyName="tables_basic_entity_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="models">
+            <column name="id" type="int">
+                <constraints primaryKey="true" primaryKeyName="models_pk" references="basic_entity(id)"
+                             foreignKeyName="models_basic_entity_fk"/>
+            </column>
+            <column name="type" type="varchar"/>
+        </createTable>
+        <createTable tableName="schemas">
+            <column name="id" type="int">
+                <constraints primaryKey="true" primaryKeyName="schemas_pk" references="basic_entity(id)"
+                             foreignKeyName="schemas_basic_entity_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="views">
+            <column name="id" type="int">
+                <constraints primaryKey="true" primaryKeyName="views_pk" references="basic_entity(id)"
+                             foreignKeyName="views_basic_entity_fk"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

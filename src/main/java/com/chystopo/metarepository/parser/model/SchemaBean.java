@@ -29,7 +29,7 @@ public class SchemaBean extends ItemBean {
     @Override
     public Schema toEntity(Item parent) {
         Schema schema = new Schema();
-        schema.setId(getId());
+        schema.setPublicId(getId());
         schema.setName(getName());
         schema.setParent(parent);
         List<Table> tables = new ArrayList<Table>();

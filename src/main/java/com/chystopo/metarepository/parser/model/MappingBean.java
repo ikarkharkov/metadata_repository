@@ -29,7 +29,7 @@ public class MappingBean extends ItemBean {
     @Override
     public Mapping toEntity(Item parent) {
         Mapping result = new Mapping();
-        result.setId(getId());
+        result.setPublicId(getId());
         result.setName(getName());
 
         List<Connection> connections = new ArrayList<Connection>();

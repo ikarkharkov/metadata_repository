@@ -30,7 +30,7 @@ public class TableBean extends ItemBean {
     public Table toEntity(Item parent) {
         Table table = new Table();
         table.setParent(parent);
-        table.setId(getId());
+        table.setPublicId(getId());
         table.setName(getName());
         List<Column> columns = new ArrayList<Column>();
         for (ColumnBean columnBean : getColumns()) {

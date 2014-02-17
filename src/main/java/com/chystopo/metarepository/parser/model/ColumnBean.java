@@ -50,7 +50,7 @@ public class ColumnBean extends ItemBean {
     public Column toEntity(Item parent) {
         Column column = new Column();
         column.setParent(parent);
-        column.setId(getId());
+        column.setPublicId(getId());
         column.setName(getName());
         column.setType(getType());
         column.setFormula(getFormula());

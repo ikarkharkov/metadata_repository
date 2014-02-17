@@ -37,7 +37,7 @@ public class ConnectionBean extends ItemBean {
 
     public Connection toEntity(Item parent) {
         Connection connection = new Connection();
-        connection.setId(getId());
+        connection.setPublicId(getId());
         connection.setName(getName());
         connection.setType(getType());
         connection.setParent(parent);

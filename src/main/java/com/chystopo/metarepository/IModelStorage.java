@@ -14,7 +14,7 @@ public interface IModelStorage {
 
     Model saveOrUpdate(Model item);
 
-    Item findById(ItemType type, Long id);
+    Item findById(ItemType type, Long publicId);
 
     Column findColumnById(Long id);
 
@@ -23,4 +23,8 @@ public interface IModelStorage {
     void saveOrUpdate(List<Model> models);
 
     Collection<Item> findChildren(Item item);
+
+    Schema findSchemaById(Long id);
+
+    Model findModelById(Long id);
 }

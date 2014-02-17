@@ -38,7 +38,7 @@ public class ModelBean extends ItemBean {
     public Model toEntity(Item parent) {
         Model model = new Model();
         model.setName(getName());
-        model.setId(getId());
+        model.setPublicId(getId());
         model.setType(getType());
         List<Schema> schemas = new ArrayList<Schema>();
         for (SchemaBean schemaBean : getSchemes()) {
