@@ -3,3 +3,5 @@ Feb 11 - 2 hours. Initial project setup, environment configuration (DB, Maven, I
 Feb 12 - 3 hours. Implemented parsing of Model section of XML. Added Liquibase for DB refactoring.
 Feb 13 - 3 hours. Implemented naive tree approach for model storage. Implemented insert
                    action for Model section.
+Feb 17 - 2.5 h    Changed structure of storage system, divided entities between tables: basic_entity,
+                  tables, models, columns and schemas.
