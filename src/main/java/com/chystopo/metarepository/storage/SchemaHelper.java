@@ -7,7 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class SchemaHelper extends BasicModelHelper<Schema> {
-    private static final String FIND_ONE_SQL = "SELECT * FROM basic_entity be INNER JOIN schemas s ON be.id=s.id WHERE be.id=?";
+    public static final String BASIC_QUERY = "SELECT be.* FROM basic_entity be INNER JOIN schemas s ON be.id=s.id ";
+    private static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=?";
+    private static final String FIND_ONE_BY_PUBLIC_ID_SQL = BASIC_QUERY + "WHERE be.context = ? and be.public_id=?";
+    public static final String INSERT_SQL = "INSERT INTO schemas(id) VALUES(?)";
 
     public SchemaHelper(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
@@ -16,7 +19,7 @@ public class SchemaHelper extends BasicModelHelper<Schema> {
     @Override
     protected Schema insert(Schema schema) {
         schema = super.insert(schema);
-        update("INSERT INTO schemas(id) VALUES(?)", new Object[]{schema.getId()});
+        update(INSERT_SQL, new Object[]{schema.getId()});
         DbHelper<Table> tableHelper = new TableHelper(jdbcTemplate);
         for (Table table : schema.getTables()) {
             table.setParent(schema);
@@ -44,5 +47,10 @@ public class SchemaHelper extends BasicModelHelper<Schema> {
     @Override
     protected String getFindSql() {
         return FIND_ONE_SQL;
+    }
+
+    @Override
+    protected String getByFindPublicIdSql() {
+        return FIND_ONE_BY_PUBLIC_ID_SQL;
     }
 }

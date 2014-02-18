@@ -1,7 +1,7 @@
 package com.chystopo.metarepository.storage;
 
 
-import com.chystopo.metarepository.IModelStorage;
+import com.chystopo.metarepository.IStorage;
 import com.chystopo.metarepository.bean.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 @TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
 public class StorageTest {
     @Autowired
-    private IModelStorage storage;
+    private IStorage storage;
 
     @Test
     public void saveColumn() {
@@ -38,7 +38,7 @@ public class StorageTest {
 
     private Table prepareTable(Long id, String name) {
         Table table = new Table();
-        table.setPublicId(id);
+        table.setId(id);
         table.setName(name);
         table.setContext("unit_test");
         return table;

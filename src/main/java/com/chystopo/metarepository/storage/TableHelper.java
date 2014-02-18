@@ -7,7 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class TableHelper extends BasicModelHelper<Table> {
-    private static final String FIND_ONE_SQL = "SELECT * FROM basic_entity be INNER JOIN tables t on be.id=t.id WHERE be.id=?";
+    public static final String BASIC_QUERY = "SELECT be.* FROM basic_entity be INNER JOIN tables t on be.id=t.id ";
+    private static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=?";
+    private static final String FIND_ONE_BY_PUBLIC_ID = BASIC_QUERY + "WHERE be.context=? and be.public_id=?";
+    public static final String INSERT_SQL = "INSERT INTO tables(id) VALUES(?)";
 
     protected TableHelper(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
@@ -22,7 +25,7 @@ public class TableHelper extends BasicModelHelper<Table> {
     protected Table insert(Table table) {
         table = super.insert(table);
 
-        update("INSERT INTO tables(id) VALUES(?)", new Object[]{table.getId()});
+        update(INSERT_SQL, new Object[]{table.getId()});
         DbHelper<Column> columnHelper = new ColumnHelper(jdbcTemplate);
         for (Column column : table.getColumns()) {
             column.setParent(table);
@@ -45,5 +48,10 @@ public class TableHelper extends BasicModelHelper<Table> {
     @Override
     protected String getFindSql() {
         return FIND_ONE_SQL;
+    }
+
+    @Override
+    protected String getByFindPublicIdSql() {
+        return FIND_ONE_BY_PUBLIC_ID;
     }
 }

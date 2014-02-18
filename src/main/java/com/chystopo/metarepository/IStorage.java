@@ -5,7 +5,7 @@ import com.chystopo.metarepository.bean.*;
 import java.util.Collection;
 import java.util.List;
 
-public interface IModelStorage {
+public interface IStorage {
     Column saveOrUpdate(Column item);
 
     Table saveOrUpdate(Table item);

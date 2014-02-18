@@ -1,6 +1,6 @@
 package com.chystopo.metarepository.bean;
 
-public class Item {
+public class Item implements HasId {
     private Long id;
     private Long publicId;
     private String name;
@@ -8,10 +8,12 @@ public class Item {
     private Item parent;
     private long parentId;
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

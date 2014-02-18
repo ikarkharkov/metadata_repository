@@ -27,14 +27,15 @@ public class MappingBean extends ItemBean {
     }
 
     @Override
-    public Mapping toEntity(Item parent) {
+    public Mapping toEntity(String context, Item parent) {
         Mapping result = new Mapping();
+        result.setContext(context);
         result.setPublicId(getId());
         result.setName(getName());
 
         List<Connection> connections = new ArrayList<Connection>();
         for (ConnectionBean connectionBean : getConnections()) {
-            connections.add(connectionBean.toEntity(result));
+            connections.add(connectionBean.toEntity(context, result));
         }
         result.setConnections(connections);
 

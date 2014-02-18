@@ -35,15 +35,16 @@ public class ConnectionBean extends ItemBean {
         this.schemas = schemas;
     }
 
-    public Connection toEntity(Item parent) {
+    public Connection toEntity(String context, Item parent) {
         Connection connection = new Connection();
+        connection.setContext(context);
         connection.setPublicId(getId());
         connection.setName(getName());
         connection.setType(getType());
         connection.setParent(parent);
         List<Schema> schemas = new ArrayList<Schema>();
         for (SchemaBean schemaBean : getSchemas()) {
-            schemas.add(schemaBean.toEntity(connection));
+            schemas.add(schemaBean.toEntity(context, connection));
         }
         connection.setSchemas(schemas);
         return connection;

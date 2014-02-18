@@ -19,6 +19,13 @@
             </table>
         </schema>
     </model>
+    <model id="3" type="database" name="DW_LOAD">
+        <schema id="31" name="s2">
+            <table id="311" name="t1">
+                <column id="3111" name="c1" type="integer"/>
+            </table>
+        </schema>
+    </model>
     <mapping id="1" name="ODS to DW">
         <connection id="11" name="ODS" type="source">
             <schema id="11" name="s">
@@ -36,6 +43,25 @@
                     <column id="2111" name="c1" formula="c+d">
                         <source idref="1111"/>
                         <source idref="1121"/>
+                    </column>
+                </table>
+            </schema>
+        </connection>
+    </mapping>
+
+    <mapping id="1" name="DW to DW_LOAD">
+        <connection id="12" name="DW" type="source">
+            <schema id="21" name="s1">
+                <table id="211" name="t1">
+                    <column id="2111" name="c1"/>
+                </table>
+            </schema>
+        </connection>
+        <connection id="12" name="DW_LOAD" type="target">
+            <schema id="31" name="s2">
+                <table id="311" name="t1">
+                    <column id="3111" name="c1">
+                        <source idref="2111"/>
                     </column>
                 </table>
             </schema>

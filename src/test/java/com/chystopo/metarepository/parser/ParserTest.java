@@ -9,8 +9,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.InputStream;
+import java.util.List;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:repository-config.xml", "classpath:test-repository-config.xml"})
@@ -20,7 +24,7 @@ public class ParserTest {
 
     @Test
     public void loadOneTableFile() {
-        Repo repo = parseFile("data/onetable.xml");
+        Repo repo = parseFile("testParserContext", "data/onetable.xml");
 
         assertEquals(1, repo.getModels().size());
 
@@ -44,7 +48,7 @@ public class ParserTest {
 
     @Test
     public void parseSimpleFile() {
-        Repo repo = parseFile("data/simple.xml");
+        Repo repo = parseFile("testParserContext", "data/simple.xml");
 
         assertEquals(2, repo.getModels().size());
         assertEquals(1, repo.getMappings().size());
@@ -67,10 +71,15 @@ public class ParserTest {
         Column targetColumn = targetTable.getColumns().get(0);
         assertEquals(2111L, targetColumn.getPublicId().longValue());
         assertEquals("c+d", targetColumn.getFormula());
+        List<Long> sources = targetColumn.getSources();
+        assertEquals(2, sources.size());
+        for (Long sourceRef : sources) {
+            assertThat(sourceRef, anyOf(equalTo(1111L), equalTo(1121L)));
+        }
     }
 
-    private Repo parseFile(String fileName) {
+    private Repo parseFile(String context, String fileName) {
         InputStream stream = getClass().getClassLoader().getResourceAsStream(fileName);
-        return parser.parse(stream);
+        return parser.parse(context, stream);
     }
 }

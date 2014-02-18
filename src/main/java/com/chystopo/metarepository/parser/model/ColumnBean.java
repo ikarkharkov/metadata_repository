@@ -3,10 +3,7 @@ package com.chystopo.metarepository.parser.model;
 import com.chystopo.metarepository.bean.Column;
 import com.chystopo.metarepository.bean.Item;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +17,7 @@ public class ColumnBean extends ItemBean {
     @XmlAttribute
     private String formula;
 
+    @XmlElement(name = "source")
     private List<SourceBean> sources = new ArrayList<SourceBean>();
 
     public String getType() {
@@ -47,8 +45,9 @@ public class ColumnBean extends ItemBean {
     }
 
     @Override
-    public Column toEntity(Item parent) {
+    public Column toEntity(String context, Item parent) {
         Column column = new Column();
+        column.setContext(context);
         column.setParent(parent);
         column.setPublicId(getId());
         column.setName(getName());

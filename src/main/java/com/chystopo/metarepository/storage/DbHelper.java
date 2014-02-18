@@ -17,7 +17,15 @@ public abstract class DbHelper<T extends Item> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    abstract Object[] getArgs(T item);
+    private Object[] getArgs(T item) {
+        PathBuilder pathBuilder = new PathBuilder();
+        return new Object[]{item.getContext(),
+                item.getPublicId(),
+                item.getParent() == null ? null : item.getParent().getId(),
+                pathBuilder.build(item),
+                getEntityType(),
+                item.getName()};
+    }
 
     public T save(T item) {
         if (item.getId() == null) {
@@ -66,4 +74,13 @@ public abstract class DbHelper<T extends Item> {
             return null;
         return result.get(0);
     }
+
+    public T findByPublicId(String context, Long publicId) {
+        List<T> result = query(getByFindPublicIdSql(), new Object[]{context, publicId}, getRowMapper());
+        if (result.isEmpty())
+            return null;
+        return result.get(0);
+    }
+
+    protected abstract String getByFindPublicIdSql();
 }

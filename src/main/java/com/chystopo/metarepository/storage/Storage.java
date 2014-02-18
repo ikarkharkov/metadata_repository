@@ -1,6 +1,6 @@
 package com.chystopo.metarepository.storage;
 
-import com.chystopo.metarepository.IModelStorage;
+import com.chystopo.metarepository.IStorage;
 import com.chystopo.metarepository.bean.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @Transactional
-public class Storage implements IModelStorage {
+public class Storage implements IStorage {
 
     private JdbcTemplate jdbcTemplate;
 

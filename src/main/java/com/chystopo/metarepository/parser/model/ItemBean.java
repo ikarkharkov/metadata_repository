@@ -32,5 +32,5 @@ public abstract class ItemBean {
         this.name = name;
     }
 
-    public abstract Item toEntity(Item parent);
+    public abstract Item toEntity(String context, Item parent);
 }

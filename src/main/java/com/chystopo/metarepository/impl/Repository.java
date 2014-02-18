@@ -1,8 +1,9 @@
 package com.chystopo.metarepository.impl;
 
-import com.chystopo.metarepository.IModelStorage;
+import com.chystopo.metarepository.IConnectionManager;
 import com.chystopo.metarepository.IParser;
 import com.chystopo.metarepository.IRepository;
+import com.chystopo.metarepository.IStorage;
 import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.parser.Repo;
 import org.slf4j.Logger;
@@ -17,18 +18,21 @@ import java.util.Collection;
 public class Repository implements IRepository {
 
     @Autowired
-    private IModelStorage storage;
+    private IStorage storage;
 
     @Autowired
     private IParser parser;
 
+    @Autowired
+    private IConnectionManager connectionManager;
+
     private static final Logger LOG = LoggerFactory.getLogger(Repository.class);
 
     @Override
-    public void load(InputStream is) {
-        Repo repo = parser.parse(is);
+    public void load(String context, InputStream is) {
+        Repo repo = parser.parse(context, is);
         storage.saveOrUpdate(repo.getModels());
-//        storage.saveOrUpdate(repo.getConnections());
+        connectionManager.save(repo.getMappings());
     }
 
     @Override

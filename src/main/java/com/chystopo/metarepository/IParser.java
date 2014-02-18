@@ -6,5 +6,5 @@ import java.io.InputStream;
 
 public interface IParser {
 
-    Repo parse(InputStream inputStream);
+    Repo parse(String context, InputStream inputStream);
 }

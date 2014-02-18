@@ -5,3 +5,4 @@ Feb 13 - 3 hours. Implemented naive tree approach for model storage. Implemented
                    action for Model section.
 Feb 17 - 2.5 h    Changed structure of storage system, divided entities between tables: basic_entity,
                   tables, models, columns and schemas.
+Feb 18 - 2 h      Implemented linage detection for given schema.

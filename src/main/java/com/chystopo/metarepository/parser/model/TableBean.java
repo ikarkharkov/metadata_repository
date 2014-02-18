@@ -27,14 +27,15 @@ public class TableBean extends ItemBean {
     }
 
     @Override
-    public Table toEntity(Item parent) {
+    public Table toEntity(String context, Item parent) {
         Table table = new Table();
+        table.setContext(context);
         table.setParent(parent);
         table.setPublicId(getId());
         table.setName(getName());
         List<Column> columns = new ArrayList<Column>();
         for (ColumnBean columnBean : getColumns()) {
-            columns.add(columnBean.toEntity(table));
+            columns.add(columnBean.toEntity(context, table));
         }
         table.setColumns(columns);
         return table;

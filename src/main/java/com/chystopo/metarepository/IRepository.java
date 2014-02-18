@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface IRepository {
 
-    void load(InputStream is);
+    void load(String context, InputStream is);
 
     Collection<Item> findChildren(Item parent);
 

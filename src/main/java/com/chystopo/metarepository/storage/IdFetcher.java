@@ -1,18 +1,15 @@
 package com.chystopo.metarepository.storage;
 
-import com.chystopo.metarepository.bean.Item;
+import com.chystopo.metarepository.bean.HasId;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by oleksiy on 17/02/14.
- */
 public class IdFetcher implements RowMapper<Long> {
-    private final Item item;
+    private final HasId item;
 
-    public IdFetcher(Item item) {
+    public IdFetcher(HasId item) {
         this.item = item;
     }
 

@@ -10,7 +10,10 @@
             </column>
             <column name="context" type="varchar"/>
             <column name="public_id" type="int"/>
-            <column name="parent_id" type="int"/>
+            <column name="parent_id" type="int">
+                <constraints references="basic_entity(id)"
+                             foreignKeyName="basic_entity_parent_fk"/>
+            </column>
             <column name="path" type="varchar"/>
             <column name="entity_type" type="varchar"/>
             <column name="name" type="varchar"/>
@@ -48,5 +51,31 @@
                              foreignKeyName="views_basic_entity_fk"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet id="2" author="oleksiy">
+        <createTable tableName="connections">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="connections_pk"/>
+            </column>
+            <column name="source" type="int">
+                <constraints references="basic_entity(id)"
+                             foreignKeyName="connections_basic_entity_source_fk"/>
+            </column>
+            <column name="destination" type="int">
+                <constraints references="basic_entity(id)"
+                             foreignKeyName="connections_basic_entity_destination_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="closure_connection">
+            <column name="source" type="int">
+                <constraints references="basic_entity(id)"
+                             foreignKeyName="closure_connection_basic_entity_source_fk"/>
+            </column>
+            <column name="destination" type="int">
+                <constraints references="basic_entity(id)"
+                             foreignKeyName="closure_connection_basic_entity_destination_fk"/>
+            </column>
+        </createTable>
+
     </changeSet>
 </databaseChangeLog>

@@ -23,12 +23,12 @@ public class Parser implements IParser {
     private static final Logger LOG = LoggerFactory.getLogger(Parser.class);
 
     @Override
-    public Repo parse(InputStream inputStream) {
+    public Repo parse(String context, InputStream inputStream) {
         Parser jaxbConverter = new Parser();
         RepositoryBean repository;
         try {
-            JAXBContext context = JAXBContext.newInstance(RepositoryBean.class);
-            repository = jaxbConverter.xml2Pojo(inputStream, context);
+            JAXBContext jaxbContext = JAXBContext.newInstance(RepositoryBean.class);
+            repository = jaxbConverter.xml2Pojo(inputStream, jaxbContext);
         } catch (JAXBException e) {
             LOG.error(e.getMessage(), e);
             throw new IllegalArgumentException(e.getMessage());
@@ -37,12 +37,12 @@ public class Parser implements IParser {
         List<Model> models = new ArrayList<Model>();
 
         for (ModelBean modelBean : repository.getModels()) {
-            models.add(modelBean.toEntity(null));
+            models.add(modelBean.toEntity(context, null));
         }
 
         List<Mapping> mappings = new ArrayList<Mapping>();
         for (MappingBean mappingBean : repository.getMappings()) {
-            mappings.add(mappingBean.toEntity(null));
+            mappings.add(mappingBean.toEntity(context, null));
         }
         return new Repo(models, mappings);
     }
