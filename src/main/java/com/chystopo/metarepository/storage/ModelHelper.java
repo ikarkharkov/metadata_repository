@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 public class ModelHelper extends BasicModelHelper<Model> {
 
-    public static final String BASIC_QUERY = "SELECT be.*, m.type FROM basic_entity be inner join models m ON be.id=m.id ";
+    public static final String BASIC_QUERY = "SELECT be.*, m.type as model_type FROM basic_entity be inner join models m ON be.id=m.id ";
     public static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=?";
     public static final String FIND_ONE_BY_PUBLIC_ID_SQL = BASIC_QUERY + "WHERE be.context=? and be.public_id=?";
     public static final String INSERT_SQL = "INSERT INTO models(id, type) VALUES(?, ?)";

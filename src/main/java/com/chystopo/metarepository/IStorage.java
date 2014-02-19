@@ -18,13 +18,25 @@ public interface IStorage {
 
     Column findColumnById(Long id);
 
+    Model findModelByPublicIdAndContext(long publicId, String context);
+
     Table findTableById(Long id);
 
     void saveOrUpdate(List<Model> models);
 
-    Collection<Item> findChildren(Item item);
+    Collection<? extends Item> findChildren(Item item, boolean recursively);
+
+    Collection<? extends Item> findChildren(Item item);
 
     Schema findSchemaById(Long id);
 
     Model findModelById(Long id);
+
+    Collection<Item> findParents(Item item);
+
+    Column findColumnByPublicIdAndContext(long publicId, String context);
+
+    Table findTableByPublicIdAndContext(long publicId, String context);
+
+    Schema findSchemaByPublicIdAndContext(long publicId, String context);
 }

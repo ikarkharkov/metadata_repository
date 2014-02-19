@@ -2,6 +2,7 @@ package com.chystopo.metarepository.storage;
 
 import com.chystopo.metarepository.IStorage;
 import com.chystopo.metarepository.bean.*;
+import com.chystopo.metarepository.storage.mapper.GlobalItemRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,18 @@ import java.util.List;
 @Transactional
 public class Storage implements IStorage {
 
+    public static final String AND_PARENT_ID = "AND parent_id=?";
+    public static final String GLOBAL_FETCH_BY_PATH = "SELECT " +
+            "  be.*," +
+            "  col.column_type AS column_type," +
+            "  col.formula," +
+            "  md.type AS model_type " +
+            "FROM basic_entity be " +
+            "  LEFT JOIN columns col ON be.id = col.id" +
+            "  LEFT JOIN tables tb ON be.id = tb.id " +
+            "  LEFT JOIN schemas sc ON be.id = sc.id " +
+            "  LEFT JOIN models md ON be.id = md.id " +
+            "WHERE path LIKE ? ";
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -53,6 +66,31 @@ public class Storage implements IStorage {
     }
 
     @Override
+    public Collection<Item> findParents(Item item) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public Column findColumnByPublicIdAndContext(long publicId, String context) {
+        return new ColumnHelper(jdbcTemplate).findByPublicId(context, publicId);
+    }
+
+    @Override
+    public Table findTableByPublicIdAndContext(long publicId, String context) {
+        return new TableHelper(jdbcTemplate).findByPublicId(context, publicId);
+    }
+
+    @Override
+    public Schema findSchemaByPublicIdAndContext(long publicId, String context) {
+        return new SchemaHelper(jdbcTemplate).findByPublicId(context, publicId);
+    }
+
+    @Override
+    public Model findModelByPublicIdAndContext(long publicId, String context) {
+        return new ModelHelper(jdbcTemplate).findByPublicId(context, publicId);
+    }
+
+    @Override
     public Table findTableById(Long id) {
         return new TableHelper(jdbcTemplate).find(id);
     }
@@ -75,7 +113,20 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public Collection<Item> findChildren(Item item) {
-        return null;
+    public Collection<? extends Item> findChildren(Item item, boolean recursively) {
+        if (recursively) {
+            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH, new Object[]{item.getPath() + item.getId() + "%"},
+                    new GlobalItemRowMapper()
+            );
+        } else {
+            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, new Object[]{item.getPath() + item.getId() + "%", item.getId()},
+                    new GlobalItemRowMapper()
+            );
+        }
+    }
+
+    @Override
+    public Collection<? extends Item> findChildren(Item item) {
+        return findChildren(item, false);
     }
 }

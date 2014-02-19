@@ -1,5 +1,8 @@
 package com.chystopo.metarepository.bean;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 public class Item implements HasId {
     private Long id;
     private Long publicId;
@@ -7,6 +10,7 @@ public class Item implements HasId {
     private String context;
     private Item parent;
     private long parentId;
+    private String path;
 
     @Override
     public Long getId() {
@@ -34,7 +38,6 @@ public class Item implements HasId {
         this.name = name;
     }
 
-
     public String getContext() {
         return context;
     }
@@ -57,5 +60,37 @@ public class Item implements HasId {
 
     public long getParentId() {
         return parentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+
+        Item item = (Item) o;
+        return new EqualsBuilder().append(parentId, item.parentId)
+                .append(id, item.id)
+                .append(context, item.context)
+                .append(name, item.name)
+                .append(publicId, item.publicId).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(publicId)
+                .append(name)
+                .append(id)
+                .append(context)
+                .append(parentId)
+                .toHashCode();
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

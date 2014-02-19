@@ -2,6 +2,7 @@ package com.chystopo.metarepository.connection;
 
 import com.chystopo.metarepository.bean.Column;
 import com.chystopo.metarepository.bean.ConnectionItem;
+import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.storage.IdFetcher;
 import com.chystopo.metarepository.storage.mapper.ColumnMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,7 +66,7 @@ public class ConnectionColumnHelper {
         return new Object[]{item.getSourceId(), item.getDestinationId()};
     }
 
-    public List<Column> findSourceColumnsByDestination(Column column) {
+    public List<Column> findSourceColumnsByDestination(Item column) {
         List<Column> result = jdbcTemplate.query(FIND_SOURCE_COLUMNS_BY_DESTINATION, new Object[]{column.getId()}, new ColumnMapper());
         return result;
     }

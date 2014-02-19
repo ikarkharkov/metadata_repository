@@ -36,12 +36,27 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Collection<Item> findChildren(Item item) {
-        return storage.findChildren(item);
+    public Collection<? extends Item> findChildren(Item parent) {
+        return findChildren(parent, false);
     }
 
     @Override
-    public Collection<Item> findTargets(Item source) {
-        return null;
+    public Collection<? extends Item> findTargets(Item source) {
+        return connectionManager.findTargets(source);
+    }
+
+    @Override
+    public Collection<? extends Item> findChildren(Item parent, boolean recursively) {
+        return storage.findChildren(parent, recursively);
+    }
+
+    @Override
+    public Collection<? extends Item> findParents(Item item) {
+        return storage.findParents(item);
+    }
+
+    @Override
+    public Collection<? extends Item> findSources(Item target) {
+        return connectionManager.findSources(target);
     }
 }
