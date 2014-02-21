@@ -8,9 +8,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by oleksiy on 18/02/14.
- */
 public class PathBuilderTest {
     @Test
     public void generatePath() {
@@ -29,5 +26,4 @@ public class PathBuilderTest {
         PathBuilder builder = new PathBuilder();
         assertEquals("/1/2/3/", builder.build(column));
     }
-
 }
