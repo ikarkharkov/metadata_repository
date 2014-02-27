@@ -14,11 +14,7 @@ public interface IStorage {
 
     Model saveOrUpdate(Model item);
 
-    Item findById(ItemType type, Long publicId);
-
     Column findColumnById(Long id);
-
-    Model findModelByPublicIdAndContext(long publicId, String context);
 
     Table findTableById(Long id);
 
@@ -34,9 +30,9 @@ public interface IStorage {
 
     Collection<Item> findParents(Item item);
 
-    Column findColumnByPublicIdAndContext(long publicId, String context);
+    Column findColumnByPathAndContext(String path, String context);
 
-    Table findTableByPublicIdAndContext(long publicId, String context);
+    Table findTableByPathAndContext(String path, String context);
 
-    Schema findSchemaByPublicIdAndContext(long publicId, String context);
+    Schema findSchemaByPathAndContext(String path, String context);
 }

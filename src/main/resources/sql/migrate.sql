@@ -12,13 +12,14 @@
 CREATE TABLE basic_entity (
   id          SERIAL NOT NULL,
   context     VARCHAR,
-  public_id   INT,
   parent_id   INT,
   path        VARCHAR,
   entity_type VARCHAR,
   name        VARCHAR,
   CONSTRAINT basic_entity_pk PRIMARY KEY (id),
   CONSTRAINT basic_entity_parent_fk FOREIGN KEY (parent_id) REFERENCES basic_entity (id));
+
+CREATE INDEX basic_entity_parent_idx ON basic_entity (parent_id);
 
 CREATE TABLE columns (
   id          INT NOT NULL,

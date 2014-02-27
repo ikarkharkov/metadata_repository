@@ -29,7 +29,6 @@ public class TableHelper extends BasicModelHelper<Table> {
         DbHelper<Column> columnHelper = new ColumnHelper(jdbcTemplate);
         for (Column column : table.getColumns()) {
             column.setParent(table);
-
             columnHelper.save(column);
         }
         return table;

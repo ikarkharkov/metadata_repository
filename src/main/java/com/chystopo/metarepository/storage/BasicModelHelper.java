@@ -9,10 +9,4 @@ public abstract class BasicModelHelper<T extends Item> extends DbHelper<T> {
         super(jdbcTemplate);
     }
 
-    @Override
-    protected String getInsertSql() {
-        return "INSERT INTO basic_entity(context, public_id, parent_id, path, entity_type, name) VALUES(?,?,?,?,?,?) RETURNING ID";
-    }
-
-
 }

@@ -34,15 +34,12 @@ public class ParserTest {
         assertEquals(1, model.getSchemas().size());
 
         Schema schema = model.getSchemas().get(0);
-        assertEquals(2L, schema.getPublicId().longValue());
         assertEquals("schema", schema.getName());
 
         Table table = schema.getTables().get(0);
-        assertEquals(3L, table.getPublicId().longValue());
         assertEquals("table", table.getName());
 
         Column column = table.getColumns().get(0);
-        assertEquals(4L, column.getPublicId().longValue());
         assertEquals("column", column.getName());
     }
 
@@ -61,7 +58,6 @@ public class ParserTest {
         Schema sourceSchema = source.getSchemas().get(0);
         Table sourceTable = sourceSchema.getTables().get(0);
         Column sourceColumn = sourceTable.getColumns().get(0);
-        assertEquals(1111L, sourceColumn.getPublicId().longValue());
 
         Connection target = mapping.getConnections().get(1);
         assertEquals("target", target.getType());
@@ -69,7 +65,6 @@ public class ParserTest {
         Schema targetSchema = target.getSchemas().get(0);
         Table targetTable = targetSchema.getTables().get(0);
         Column targetColumn = targetTable.getColumns().get(0);
-        assertEquals(2111L, targetColumn.getPublicId().longValue());
         assertEquals("c+d", targetColumn.getFormula());
         List<Long> sources = targetColumn.getSources();
         assertEquals(2, sources.size());

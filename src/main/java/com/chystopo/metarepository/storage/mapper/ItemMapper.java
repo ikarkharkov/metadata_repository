@@ -14,8 +14,9 @@ public abstract class ItemMapper<T extends Item> implements RowMapper<T> {
         item.setParentId(rs.getLong("parent_id"));
         item.setName(rs.getString("name"));
         item.setContext(rs.getString("context"));
-        item.setPublicId(rs.getLong("public_id"));
-        item.setPath(rs.getString("path"));
+        item.setModelId(rs.getLong("model_id"));
+        item.setSchemaId(rs.getLong("schema_id"));
+        item.setTableId(rs.getLong("table_id"));
         return item;
     }
 

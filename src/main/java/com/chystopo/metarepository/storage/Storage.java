@@ -56,11 +56,6 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public Item findById(ItemType type, Long publicId) {
-        return null;
-    }
-
-    @Override
     public Column findColumnById(Long id) {
         return new ColumnHelper(jdbcTemplate).find(id);
     }
@@ -71,24 +66,24 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public Column findColumnByPublicIdAndContext(long publicId, String context) {
-        return new ColumnHelper(jdbcTemplate).findByPublicId(context, publicId);
+    public Column findColumnByPathAndContext(String path, String context) {
+        return new ColumnHelper(jdbcTemplate).findByPath(context, path);
     }
 
     @Override
-    public Table findTableByPublicIdAndContext(long publicId, String context) {
-        return new TableHelper(jdbcTemplate).findByPublicId(context, publicId);
+    public Table findTableByPathAndContext(String path, String context) {
+        return new TableHelper(jdbcTemplate).findByPath(context, path);
     }
 
     @Override
-    public Schema findSchemaByPublicIdAndContext(long publicId, String context) {
-        return new SchemaHelper(jdbcTemplate).findByPublicId(context, publicId);
+    public Schema findSchemaByPathAndContext(String path, String context) {
+        return new SchemaHelper(jdbcTemplate).findByPath(context, path);
     }
-
+/*
     @Override
-    public Model findModelByPublicIdAndContext(long publicId, String context) {
-        return new ModelHelper(jdbcTemplate).findByPublicId(context, publicId);
-    }
+    public Model findModelByPathAndContext(String path, String context) {
+        return new ModelHelper(jdbcTemplate).findByPath(context, path);
+    }*/
 
     @Override
     public Table findTableById(Long id) {
@@ -115,11 +110,11 @@ public class Storage implements IStorage {
     @Override
     public Collection<? extends Item> findChildren(Item item, boolean recursively) {
         if (recursively) {
-            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH, new Object[]{item.getPath() + item.getId() + "%"},
+            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH, new Object[]{},
                     new GlobalItemRowMapper()
             );
         } else {
-            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, new Object[]{item.getPath() + item.getId() + "%", item.getId()},
+            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, new Object[]{item.getId()},
                     new GlobalItemRowMapper()
             );
         }

@@ -49,7 +49,13 @@
         </connection>
     </mapping>
 
-    <mapping id="1" name="DW to DW_LOAD">
+    <!--model1.table1.column1 -> model2.table2.column2-->
+    <!--model1.table2.column4 -> model2.table2.column2-->
+    <!--model1.table1.column1 -> model2.table2.column3 -> model3.table3.column4-->
+
+    <!--model2.table2.column2 and model3.table3.column4-->
+
+    <mapping id="2" name="DW to DW_LOAD">
         <connection id="12" name="DW" type="source">
             <schema id="21" name="s1">
                 <table id="211" name="t1">

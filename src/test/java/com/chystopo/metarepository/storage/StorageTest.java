@@ -20,25 +20,8 @@ public class StorageTest {
     @Autowired
     private IStorage storage;
 
-    @Test
-    public void saveColumn() {
-        Table table = prepareTable(1L, "columnTable");
-        String columnName = "test";
-        String columnType = "string";
-        Column column = prepareColumn(table, columnName, columnType);
-        Column savedColumn = storage.saveOrUpdate(column);
-
-        assertNotNull(savedColumn.getId());
-
-        Column foundColumn = storage.findColumnById(savedColumn.getId());
-        assertNotNull(foundColumn);
-        assertEquals(columnName, foundColumn.getName());
-        assertEquals(columnType, foundColumn.getType());
-    }
-
-    private Table prepareTable(Long id, String name) {
+    private Table prepareTable(String name) {
         Table table = new Table();
-        table.setId(id);
         table.setName(name);
         table.setContext("unit_test");
         return table;
@@ -54,45 +37,6 @@ public class StorageTest {
     }
 
     @Test
-    public void saveTableWithColumns() {
-        String tableName = "table1";
-        Table table = prepareTable(null, tableName);
-        table.getColumns().add(prepareColumn(table, "tableTest1", "string"));
-        table.getColumns().add(prepareColumn(table, "tableTest2", "int"));
-        table.getColumns().add(prepareColumn(table, "tableTest3", "blob"));
-
-        Table savedTable = storage.saveOrUpdate(table);
-
-        assertNotNull(savedTable.getId());
-        assertChildrenHasCorrectReferenceToParent(savedTable.getId(), savedTable);
-
-        Table foundTable = storage.findTableById(savedTable.getId());
-        assertNotNull(foundTable);
-        assertEquals(tableName, foundTable.getName());
-    }
-
-    @Test
-    public void saveSchemaWithTables() {
-        String schemaName = "testSchema";
-        Schema schema = prepareSchema(schemaName);
-
-        Table table = prepareTable(null, "schemaTable1");
-        schema.getTables().add(table);
-        table.getColumns().add(prepareColumn(table, "schemaTest1", "string"));
-        table.getColumns().add(prepareColumn(table, "schemaTest2", "int"));
-        table.getColumns().add(prepareColumn(table, "schemaTest3", "blob"));
-
-        Schema savedSchema = storage.saveOrUpdate(schema);
-
-        assertNotNull(savedSchema.getId());
-        assertChildrenHasCorrectReferenceToParent(savedSchema.getId(), savedSchema);
-
-        Schema foundSchema = storage.findSchemaById(savedSchema.getId());
-        assertNotNull(foundSchema);
-        assertEquals(schemaName, foundSchema.getName());
-    }
-
-    @Test
     public void saveModelWithSchema() {
         Model model = new Model();
         String modelName = "testDB";
@@ -101,7 +45,7 @@ public class StorageTest {
         model.setType(modelType);
         Schema schema = prepareSchema("modelSchema");
         model.getSchemas().add(schema);
-        Table table = prepareTable(null, "modelTable1");
+        Table table = prepareTable("modelTable1");
         schema.getTables().add(table);
         table.getColumns().add(prepareColumn(table, "modelTest1", "string"));
         table.getColumns().add(prepareColumn(table, "modelTest2", "int"));
@@ -116,6 +60,9 @@ public class StorageTest {
         assertNotNull(foundModel);
         assertEquals(modelName, foundModel.getName());
         assertEquals(modelType, foundModel.getType());
+
+//        Collection<Schema> schemas = (Collection<Schema>) storage.findChildren(foundModel);
+//        assertEquals(1, schemas.size());
     }
 
     private void assertChildrenHasCorrectReferenceToParent(Long parentId, Branch savedModel) {

@@ -5,12 +5,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class Item implements HasId {
     private Long id;
-    private Long publicId;
     private String name;
     private String context;
     private Item parent;
-    private long parentId;
-    private String path;
+    private Long parentId;
+    private Long modelId;
+    private Long schemaId;
+    private Long tableId;
 
     @Override
     public Long getId() {
@@ -20,14 +21,6 @@ public class Item implements HasId {
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setPublicId(Long publicId) {
-        this.publicId = publicId;
-    }
-
-    public Long getPublicId() {
-        return publicId;
     }
 
     public String getName() {
@@ -52,14 +45,41 @@ public class Item implements HasId {
 
     public void setParent(Item parent) {
         this.parent = parent;
+        if (parent != null) {
+            parentId = parent.getId();
+        }
     }
 
-    public void setParentId(long parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    public long getParentId() {
+    public Long getParentId() {
         return parentId;
+    }
+
+    public Long getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(Long modelId) {
+        this.modelId = modelId;
+    }
+
+    public Long getSchemaId() {
+        return schemaId;
+    }
+
+    public void setSchemaId(Long schemaId) {
+        this.schemaId = schemaId;
+    }
+
+    public Long getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Long tableId) {
+        this.tableId = tableId;
     }
 
     @Override
@@ -71,26 +91,22 @@ public class Item implements HasId {
         return new EqualsBuilder().append(parentId, item.parentId)
                 .append(id, item.id)
                 .append(context, item.context)
-                .append(name, item.name)
-                .append(publicId, item.publicId).isEquals();
+                .append(modelId, item.modelId)
+                .append(schemaId, item.schemaId)
+                .append(tableId, item.tableId)
+                .append(name, item.name).isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(publicId)
                 .append(name)
                 .append(id)
                 .append(context)
                 .append(parentId)
+                .append(modelId)
+                .append(schemaId)
+                .append(tableId)
                 .toHashCode();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 }

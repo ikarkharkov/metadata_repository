@@ -49,7 +49,6 @@ public class ColumnBean extends ItemBean {
         Column column = new Column();
         column.setContext(context);
         column.setParent(parent);
-        column.setPublicId(getId());
         column.setName(getName());
         column.setType(getType());
         column.setFormula(getFormula());

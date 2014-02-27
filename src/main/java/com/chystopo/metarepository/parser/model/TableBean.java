@@ -31,7 +31,6 @@ public class TableBean extends ItemBean {
         Table table = new Table();
         table.setContext(context);
         table.setParent(parent);
-        table.setPublicId(getId());
         table.setName(getName());
         List<Column> columns = new ArrayList<Column>();
         for (ColumnBean columnBean : getColumns()) {

@@ -14,7 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.InputStream;
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -39,11 +40,11 @@ public class ConnectionManagerTest {
         }
 
         connectionManager.save(repo.getMappings());
-        Column column = storage.findColumnByPublicIdAndContext(2111L, context);
-        Collection<? extends Item> linage = connectionManager.findSources(column);
+        Column column = storage.findColumnByPathAndContext("DW.s1.t1.c1", context);
+        Collection<Column> linage = connectionManager.findSources(column);
         assertEquals(2, linage.size());
         for (Item item : linage) {
-            assertThat(item.getPublicId(), anyOf(equalTo(1111L), equalTo(1121L)));
+            assertThat(item.getName(), anyOf(equalTo("c"), equalTo("e")));
         }
     }
 
@@ -64,32 +65,29 @@ public class ConnectionManagerTest {
     }
 
     private void checkModelLinage(String context) {
-        Schema schema = storage.findSchemaByPublicIdAndContext(31L, context);
-        Collection<? extends Item> linage = connectionManager.findSources(schema);
-        assertEquals(2, linage.size());
+        Schema schema = storage.findSchemaByPathAndContext("DW_LOAD.s2", context);
+        Collection<Column> linage = connectionManager.findSources(schema);
+        assertEquals(3, linage.size());
         for (Item item : linage) {
-            assertThat(item, is(instanceOf(Schema.class)));
-            assertThat(item.getPublicId(), anyOf(equalTo(11L), equalTo(21L)));
+            assertThat(item.getName(), anyOf(equalTo("c1"), equalTo("c"), equalTo("e")));
         }
     }
 
     private void checkTableLinage(String context) {
-        Table table = storage.findTableByPublicIdAndContext(311L, context);
-        Collection<? extends Item> linage = connectionManager.findSources(table);
+        Table table = storage.findTableByPathAndContext("DW_LOAD.s2.t1", context);
+        Collection<Column> linage = connectionManager.findSources(table);
         assertEquals(3, linage.size());
         for (Item item : linage) {
-            assertThat(item, is(instanceOf(Table.class)));
-            assertThat(item.getPublicId(), anyOf(equalTo(111L), equalTo(112L), equalTo(211L)));
+            assertThat(item.getName(), anyOf(equalTo("c1"), equalTo("c"), equalTo("e")));
         }
     }
 
     private void checkColumnLinage(String context) {
-        Column column = storage.findColumnByPublicIdAndContext(3111L, context);
-        Collection<? extends Item> linage = connectionManager.findSources(column);
+        Column column = storage.findColumnByPathAndContext("DW_LOAD.s2.t1.c1", context);
+        Collection<Column> linage = connectionManager.findSources(column);
         assertEquals(3, linage.size());
         for (Item item : linage) {
-            assertThat(item, is(instanceOf(Column.class)));
-            assertThat(item.getPublicId(), anyOf(equalTo(1111L), equalTo(1121L), equalTo(2111L)));
+            assertThat(item.getName(), anyOf(equalTo("c1"), equalTo("c"), equalTo("e")));
         }
     }
 

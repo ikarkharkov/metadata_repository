@@ -9,15 +9,28 @@
                 <constraints primaryKey="true" primaryKeyName="basic_entity_pk"/>
             </column>
             <column name="context" type="varchar"/>
-            <column name="public_id" type="int"/>
             <column name="parent_id" type="int">
                 <constraints references="basic_entity(id)"
                              foreignKeyName="basic_entity_parent_fk"/>
             </column>
-            <column name="path" type="varchar"/>
+            <column name="model_id" type="int">
+                <constraints references="basic_entity(id)" foreignKeyName="basic_entity_model_fk"/>
+            </column>
+            <column name="schema_id" type="int">
+                <constraints references="basic_entity(id)" foreignKeyName="basic_entity_schema_fk"/>
+            </column>
+            <column name="table_id" type="int">
+                <constraints references="basic_entity(id)" foreignKeyName="basic_entity_table_fk"/>
+            </column>
+            <column name="view_id" type="int">
+                <constraints references="basic_entity(id)" foreignKeyName="basic_entity_view_fk"/>
+            </column>
             <column name="entity_type" type="varchar"/>
             <column name="name" type="varchar"/>
         </createTable>
+        <createIndex tableName="basic_entity" indexName="basic_entity_parent_idx">
+            <column name="parent_id"/>
+        </createIndex>
         <createTable tableName="columns">
             <column name="id" type="int">
                 <constraints primaryKey="true" primaryKeyName="columns_pk" references="basic_entity(id)"

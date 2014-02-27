@@ -30,7 +30,6 @@ public class MappingBean extends ItemBean {
     public Mapping toEntity(String context, Item parent) {
         Mapping result = new Mapping();
         result.setContext(context);
-        result.setPublicId(getId());
         result.setName(getName());
 
         List<Connection> connections = new ArrayList<Connection>();

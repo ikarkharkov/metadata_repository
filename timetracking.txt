@@ -7,3 +7,6 @@ Feb 17 - 2.5 h    Changed structure of storage system, divided entities between 
                   tables, models, columns and schemas.
 Feb 18 - 2 h      Implemented linage detection for given schema.
 Feb 19 - 1.5 h    Implemented recursive linage detection for Table and Schema. Improved IRepository API.
+Feb 21 - 1 h      Prepare presentation
+Feb 22 - 1 h      Load DB with 10 000 000 columns. Added indexes.
+Feb 27 - 3 h      Replaced basic_entity path with model_id/schema_id/table_id columns

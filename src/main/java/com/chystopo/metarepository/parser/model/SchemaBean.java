@@ -30,7 +30,6 @@ public class SchemaBean extends ItemBean {
     public Schema toEntity(String context, Item parent) {
         Schema schema = new Schema();
         schema.setContext(context);
-        schema.setPublicId(getId());
         schema.setName(getName());
         schema.setParent(parent);
         List<Table> tables = new ArrayList<Table>();

@@ -34,10 +34,10 @@ public class ConnectionManager implements IConnectionManager {
     }
 
     private void save(Column column) {
-        Column destinationColumn = columnHelper.findByPublicId(column.getContext(), column.getPublicId());
+        Column destinationColumn = columnHelper.findByPath(column.getContext(), "column.path");
 
-        for (Long sourceId : column.getSources()) {
-            Column sourceColumn = columnHelper.findByPublicId(column.getContext(), sourceId);
+        for (Long pathId : column.getSources()) {
+            Column sourceColumn = columnHelper.findByPath(column.getContext(), pathId.toString());
             ConnectionItem item = new ConnectionItem();
             item.setContext(column.getContext());
             item.setDestinationId(destinationColumn.getId());
@@ -71,35 +71,26 @@ public class ConnectionManager implements IConnectionManager {
     }
 
     @Override
-    public Collection<? extends Item> findSources(Item target) {
+    public Collection<Column> findSources(Item target) {
         ConnectionColumnHelper connectionColumnHelper = new ConnectionColumnHelper(jdbcTemplate);
         if (target instanceof Column) {
             return connectionColumnHelper.findSourceColumnsByDestination(target);
         } else if (target instanceof Table) {
-            Collection<Long> resultIds = new HashSet<Long>();
+            Collection<Column> result = new HashSet<Column>();
             for (Item child : storage.findChildren(target)) {
-                for (Item sourceItem : findSources(child)) {
-                    resultIds.add(sourceItem.getParentId());
+                for (Column sourceItem : findSources(child)) {
+                    result.add(sourceItem);
                 }
-            }
-            Collection<Table> result = new HashSet<Table>();
-            for (Long resultId : resultIds) {
-                result.add(storage.findTableById(resultId));
             }
             return result;
         } else if (target instanceof Schema) {
-            Collection<Long> resultIds = new HashSet<Long>();
+            Collection<Column> result = new HashSet<Column>();
             for (Item child : storage.findChildren(target)) {
-                for (Item sourceItem : findSources(child)) {
-                    resultIds.add(sourceItem.getParentId());
-                }
+                result.addAll(findSources(child));
             }
-            Collection<Schema> result = new HashSet<Schema>();
-            for (Long resultId : resultIds) {
-                result.add(storage.findSchemaById(resultId));
-            }
+
             return result;
         }
-        return new ArrayList<Item>();
+        return new ArrayList<Column>();
     }
 }

@@ -1,5 +1,6 @@
 package com.chystopo.metarepository;
 
+import com.chystopo.metarepository.bean.Column;
 import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Mapping;
 
@@ -11,5 +12,5 @@ public interface IConnectionManager {
 
     Collection<? extends Item> findTargets(Item source);
 
-    Collection<? extends Item> findSources(Item target);
+    Collection<Column> findSources(Item target);
 }

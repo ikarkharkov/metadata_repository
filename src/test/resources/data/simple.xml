@@ -15,7 +15,7 @@
     <model id="2" type="database" name="DW">
         <schema id="21" name="s1">
             <table id="211" name="t1">
-                <column id="2111" name="c1" type="integer"/>
+                <column id="11" name="c1" type="integer"/>
             </table>
         </schema>
     </model>
