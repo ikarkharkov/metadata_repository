@@ -1,11 +1,11 @@
 package com.chystopo.metarepository.storage;
 
 import com.chystopo.metarepository.bean.Item;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 public abstract class BasicModelHelper<T extends Item> extends DbHelper<T> {
 
-    protected BasicModelHelper(JdbcTemplate jdbcTemplate) {
+    protected BasicModelHelper(NamedParameterJdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
 

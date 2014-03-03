@@ -4,19 +4,21 @@ import com.chystopo.metarepository.IStorage;
 import com.chystopo.metarepository.bean.*;
 import com.chystopo.metarepository.storage.mapper.GlobalItemRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Transactional
 public class Storage implements IStorage {
 
-    public static final String AND_PARENT_ID = "AND parent_id=?";
+    public static final String AND_PARENT_ID = "AND parent_id=:parentId";
     public static final String GLOBAL_FETCH_BY_PATH = "SELECT " +
             "  be.*," +
             "  col.column_type AS column_type," +
@@ -27,12 +29,12 @@ public class Storage implements IStorage {
             "  LEFT JOIN tables tb ON be.id = tb.id " +
             "  LEFT JOIN schemas sc ON be.id = sc.id " +
             "  LEFT JOIN models md ON be.id = md.id " +
-            "WHERE path LIKE ? ";
-    private JdbcTemplate jdbcTemplate;
+            "WHERE path LIKE :path ";
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
@@ -110,11 +112,13 @@ public class Storage implements IStorage {
     @Override
     public Collection<? extends Item> findChildren(Item item, boolean recursively) {
         if (recursively) {
-            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH, new Object[]{},
+            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH, new HashMap<String, Object>(),
                     new GlobalItemRowMapper()
             );
         } else {
-            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, new Object[]{item.getId()},
+            Map<String, Object> args = new HashMap<String, Object>();
+            args.put("parentId", item.getId());
+            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, args,
                     new GlobalItemRowMapper()
             );
         }

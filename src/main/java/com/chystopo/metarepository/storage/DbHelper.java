@@ -5,32 +5,37 @@ import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Schema;
 import com.chystopo.metarepository.bean.Table;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class DbHelper<T extends Item> {
     public static final String INSERT_SQL
-            = "INSERT INTO basic_entity(context, parent_id, entity_type, name, model_id, schema_id, table_id, view_id) VALUES(?,?,?,?,?,?,?,?) RETURNING ID";
-    protected JdbcTemplate jdbcTemplate;
+            = "INSERT INTO basic_entity(context, parent_id, entity_type, name, model_id, schema_id, table_id, view_id)" +
+            " VALUES(:context,:parentId,:entityType,:name,:modelId,:schemaId,:tableId,:viewId) RETURNING ID";
+    protected NamedParameterJdbcTemplate jdbcTemplate;
 
-    protected DbHelper(JdbcTemplate jdbcTemplate) {
+    protected DbHelper(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private Object[] getArgs(T item) {
-        return new Object[]{item.getContext(),
-                item.getParent() == null ? null : item.getParent().getId(),
-                getEntityType(),
-                item.getName(),
-                getModelId(item),
-                getSchemaId(item),
-                getTableId(item),
-                getViewId(item)};
+    private Map<String, Object> getArgs(T item) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("context", item.getContext());
+        params.put("parentId", item.getParent() == null ? null : item.getParent().getId());
+        params.put("entityType", getEntityType());
+        params.put("name", item.getName());
+        params.put("modelId", getModelId(item));
+        params.put("schemaId", getSchemaId(item));
+        params.put("tableId", getSchemaId(item));
+        params.put("viewId", getViewId(item));
+        return params;
     }
 
     private Long getViewId(T item) {
@@ -93,11 +98,11 @@ public abstract class DbHelper<T extends Item> {
 
     protected abstract String getUpdateSQL();
 
-    protected List<T> query(String sql, Object[] args, RowMapper<T> rowMapper) {
+    protected List<T> query(String sql, Map<String, Object> args, RowMapper<T> rowMapper) {
         return jdbcTemplate.query(sql, args, rowMapper);
     }
 
-    protected void update(String sql, Object[] args) {
+    protected void update(String sql, Map<String, Object> args) {
         jdbcTemplate.update(sql, args);
     }
 
@@ -108,14 +113,19 @@ public abstract class DbHelper<T extends Item> {
     protected abstract String getFindSql();
 
     public T find(Long id) {
-        List<T> result = query(getFindSql(), new Object[]{id}, getRowMapper());
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("id", id);
+        List<T> result = query(getFindSql(), args, getRowMapper());
         if (result.isEmpty())
             return null;
         return result.get(0);
     }
 
     public T findByPath(String context, String path) {
-        List<T> result = query(getByFindPublicIdSql(), new Object[]{context, path}, getRowMapper());
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("context", context);
+        args.put("path", path);
+        List<T> result = query(getByFindPublicIdSql(), args, getRowMapper());
         if (result.isEmpty())
             return null;
         return result.get(0);

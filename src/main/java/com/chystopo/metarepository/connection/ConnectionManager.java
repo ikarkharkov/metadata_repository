@@ -5,7 +5,7 @@ import com.chystopo.metarepository.IStorage;
 import com.chystopo.metarepository.bean.*;
 import com.chystopo.metarepository.storage.ColumnHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +22,13 @@ public class ConnectionManager implements IConnectionManager {
     @Autowired
     private IStorage storage;
 
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
     private ColumnHelper columnHelper;
     private ConnectionColumnHelper connectionColumnHelper;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         columnHelper = new ColumnHelper(jdbcTemplate);
         connectionColumnHelper = new ConnectionColumnHelper(jdbcTemplate);
     }

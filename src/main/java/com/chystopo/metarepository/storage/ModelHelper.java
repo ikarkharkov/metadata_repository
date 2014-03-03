@@ -3,17 +3,21 @@ package com.chystopo.metarepository.storage;
 import com.chystopo.metarepository.bean.Model;
 import com.chystopo.metarepository.bean.Schema;
 import com.chystopo.metarepository.storage.mapper.ModelMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModelHelper extends BasicModelHelper<Model> {
 
-    public static final String BASIC_QUERY = "SELECT be.*, m.type as model_type FROM basic_entity be inner join models m ON be.id=m.id ";
-    public static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=?";
-    public static final String FIND_ONE_BY_PUBLIC_ID_SQL = BASIC_QUERY + "WHERE be.context=? and be.public_id=?";
-    public static final String INSERT_SQL = "INSERT INTO models(id, type) VALUES(?, ?)";
+    public static final String BASIC_QUERY = "SELECT be.*, m.type as model_type " +
+            "FROM basic_entity be inner join models m ON be.id=m.id ";
+    public static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=:id";
+    public static final String FIND_ONE_BY_PUBLIC_ID_SQL = BASIC_QUERY + "WHERE be.context=:context";
+    public static final String INSERT_SQL = "INSERT INTO models(id, type) VALUES(:modelId, :type)";
 
-    public ModelHelper(JdbcTemplate jdbcTemplate) {
+    public ModelHelper(NamedParameterJdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
 
@@ -25,7 +29,11 @@ public class ModelHelper extends BasicModelHelper<Model> {
     @Override
     protected Model insert(Model model) {
         model = super.insert(model);
-        update(INSERT_SQL, new Object[]{model.getId(), model.getType()});
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("modelId", model.getId());
+        args.put("type", model.getType());
+
+        update(INSERT_SQL, args);
         DbHelper<Schema> schemaHelper = new SchemaHelper(jdbcTemplate);
         for (Schema schema : model.getSchemas()) {
             schema.setParent(model);

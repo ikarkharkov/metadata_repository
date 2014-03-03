@@ -10,3 +10,4 @@ Feb 19 - 1.5 h    Implemented recursive linage detection for Table and Schema. I
 Feb 21 - 1 h      Prepare presentation
 Feb 22 - 1 h      Load DB with 10 000 000 columns. Added indexes.
 Feb 27 - 3 h      Replaced basic_entity path with model_id/schema_id/table_id columns
+Mar 03 - 1 h      Changed SQL queries to use named parameters instead of positional '?' marks

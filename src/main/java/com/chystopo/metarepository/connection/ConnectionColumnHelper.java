@@ -5,20 +5,18 @@ import com.chystopo.metarepository.bean.ConnectionItem;
 import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.storage.IdFetcher;
 import com.chystopo.metarepository.storage.mapper.ColumnMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConnectionColumnHelper {
-    private static final String INSERT_SQL = "INSERT INTO connections(source, destination) VALUES(?, ?) RETURNING ID";
-    public static final String FIND_SOURCE_COLUMNS_BY_DESTINATION = "SELECT be.*, col.column_type, col.formula FROM closure_connection con INNER JOIN basic_entity be ON con.source=be.id INNER JOIN columns col ON be.id=col.id WHERE destination=?";
-    public static final String INSERT_CLOSURE_CONNECTION = "INSERT INTO closure_connection(source, destination) VALUES (?, ?)";
-    private final JdbcTemplate jdbcTemplate;
+    private static final String INSERT_SQL = "INSERT INTO connections(source, destination) VALUES(:sourceId, :destinationId) RETURNING ID";
+    public static final String FIND_SOURCE_COLUMNS_BY_DESTINATION = "SELECT be.*, col.column_type, col.formula FROM closure_connection con INNER JOIN basic_entity be ON con.source=be.id INNER JOIN columns col ON be.id=col.id WHERE destination=:destinationId";
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    protected ConnectionColumnHelper(JdbcTemplate jdbcTemplate) {
+    protected ConnectionColumnHelper(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -45,29 +43,24 @@ public class ConnectionColumnHelper {
     }
 
     private void insertCloserRecord(Long sourceId, Long destinationId) {
-        jdbcTemplate.update(INSERT_CLOSURE_CONNECTION, sourceId, destinationId);
+        Map<String, Object> args = new HashMap<String, Object>();
     }
 
     private void recursiveClosureUpdate(Long sourceId, Long destinationId) {
-        List<Long> sources = jdbcTemplate.query("SELECT source FROM closure_connection WHERE destination=?", new Object[]{sourceId}, new RowMapper<Long>() {
-            @Override
-            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getLong("source");
-            }
-        });
-        if (!sources.isEmpty()) {
-            for (Long source : sources) {
-                insertCloserRecord(source, destinationId);
-            }
-        }
+
     }
 
-    private Object[] getArgs(ConnectionItem item) {
-        return new Object[]{item.getSourceId(), item.getDestinationId()};
+    private Map<String, Object> getArgs(ConnectionItem item) {
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("sourceId", item.getSourceId());
+        args.put("destinationId", item.getDestinationId());
+        return args;
     }
 
     public List<Column> findSourceColumnsByDestination(Item column) {
-        List<Column> result = jdbcTemplate.query(FIND_SOURCE_COLUMNS_BY_DESTINATION, new Object[]{column.getId()}, new ColumnMapper());
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("destinationId", column.getId());
+        List<Column> result = jdbcTemplate.query(FIND_SOURCE_COLUMNS_BY_DESTINATION, args, new ColumnMapper());
         return result;
     }
 }
