@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Column extends Item {
     private String type;
-    private List<Long> sources;
+    private List<String> sources;
     private String formula;
 
     public void setType(String type) {
@@ -18,11 +18,11 @@ public class Column extends Item {
         return type;
     }
 
-    public void setSources(List<Long> sources) {
+    public void setSources(List<String> sources) {
         this.sources = sources;
     }
 
-    public List<Long> getSources() {
+    public List<String> getSources() {
         return sources;
     }
 

@@ -11,11 +11,16 @@ import java.util.Map;
 
 public class ModelHelper extends BasicModelHelper<Model> {
 
-    public static final String BASIC_QUERY = "SELECT be.*, m.type as model_type " +
+    private static final String BASIC_QUERY = "SELECT be.*, m.type as model_type " +
             "FROM basic_entity be inner join models m ON be.id=m.id ";
-    public static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=:id";
-    public static final String FIND_ONE_BY_PUBLIC_ID_SQL = BASIC_QUERY + "WHERE be.context=:context";
-    public static final String INSERT_SQL = "INSERT INTO models(id, type) VALUES(:modelId, :type)";
+    private static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=:id";
+    private static final String FIND_ONE_BY_PATH = "SELECT\n" +
+            "  be1.*, m.type as model_type\n" +
+            "FROM basic_entity be1\n" +
+            "JOIN models m on be1.id=m.id " +
+            "WHERE\n" +
+            "  be1.name = :modelName AND be1.entity_type = 'model' AND be1.context = :context";
+    private static final String INSERT_SQL = "INSERT INTO models(id, type) VALUES(:modelId, :type)";
 
     public ModelHelper(NamedParameterJdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
@@ -58,8 +63,8 @@ public class ModelHelper extends BasicModelHelper<Model> {
     }
 
     @Override
-    protected String getByFindPublicIdSql() {
-        return FIND_ONE_BY_PUBLIC_ID_SQL;
+    protected String getByFindContextAndPathSql() {
+        return FIND_ONE_BY_PATH;
     }
 }
 

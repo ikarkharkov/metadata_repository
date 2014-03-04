@@ -16,11 +16,11 @@ public interface IStorage {
 
     Column findColumnById(Long id);
 
+    Model findModelByPathAndContext(String path, String context);
+
     Table findTableById(Long id);
 
     void saveOrUpdate(List<Model> models);
-
-    Collection<? extends Item> findChildren(Item item, boolean recursively);
 
     Collection<? extends Item> findChildren(Item item);
 

@@ -35,14 +35,15 @@ public class Parser implements IParser {
         }
 
         List<Model> models = new ArrayList<Model>();
-
+        BeanVisitor visitor = new BeanVisitor(context, repository.getModels());
         for (ModelBean modelBean : repository.getModels()) {
-            models.add(modelBean.toEntity(context, null));
+            models.add(modelBean.toEntity(visitor, null));
         }
 
         List<Mapping> mappings = new ArrayList<Mapping>();
+
         for (MappingBean mappingBean : repository.getMappings()) {
-            mappings.add(mappingBean.toEntity(context, null));
+            mappings.add(mappingBean.toEntity(visitor, null));
         }
         return new Repo(models, mappings);
     }

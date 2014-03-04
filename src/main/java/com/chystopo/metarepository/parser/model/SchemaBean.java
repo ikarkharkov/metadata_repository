@@ -2,7 +2,7 @@ package com.chystopo.metarepository.parser.model;
 
 import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Schema;
-import com.chystopo.metarepository.bean.Table;
+import com.chystopo.metarepository.parser.BeanVisitor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,16 +27,9 @@ public class SchemaBean extends ItemBean {
     }
 
     @Override
-    public Schema toEntity(String context, Item parent) {
-        Schema schema = new Schema();
-        schema.setContext(context);
-        schema.setName(getName());
-        schema.setParent(parent);
-        List<Table> tables = new ArrayList<Table>();
-        for (TableBean tableBean : getTables()) {
-            tables.add(tableBean.toEntity(context, schema));
-        }
-        schema.setTables(tables);
+    public Schema toEntity(BeanVisitor visitor, Item parent) {
+        Schema schema = visitor.visitSchema(this, parent);
+
         return schema;
     }
 }

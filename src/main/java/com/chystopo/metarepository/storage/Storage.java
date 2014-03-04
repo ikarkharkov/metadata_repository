@@ -18,7 +18,7 @@ import java.util.Map;
 @Transactional
 public class Storage implements IStorage {
 
-    public static final String AND_PARENT_ID = "AND parent_id=:parentId";
+    public static final String AND_PARENT_ID = "WHERE parent_id=:parentId";
     public static final String GLOBAL_FETCH_BY_PATH = "SELECT " +
             "  be.*," +
             "  col.column_type AS column_type," +
@@ -28,8 +28,7 @@ public class Storage implements IStorage {
             "  LEFT JOIN columns col ON be.id = col.id" +
             "  LEFT JOIN tables tb ON be.id = tb.id " +
             "  LEFT JOIN schemas sc ON be.id = sc.id " +
-            "  LEFT JOIN models md ON be.id = md.id " +
-            "WHERE path LIKE :path ";
+            "  LEFT JOIN models md ON be.id = md.id ";
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -69,23 +68,44 @@ public class Storage implements IStorage {
 
     @Override
     public Column findColumnByPathAndContext(String path, String context) {
-        return new ColumnHelper(jdbcTemplate).findByPath(context, path);
+        Map<String, String> pathElements = splitPath(path);
+        return new ColumnHelper(jdbcTemplate).findByPath(context, pathElements);
+    }
+
+    private Map<String, String> splitPath(String path) {
+        String[] elements = path.split("\\.");
+        Map<String, String> result = new HashMap<String, String>();
+        switch (elements.length) {
+            case 4:
+                result.put("columnName", elements[3]);
+            case 3:
+                result.put("tableName", elements[2]);
+            case 2:
+                result.put("schemaName", elements[1]);
+            case 1:
+                result.put("modelName", elements[0]);
+        }
+
+        return result;
     }
 
     @Override
     public Table findTableByPathAndContext(String path, String context) {
-        return new TableHelper(jdbcTemplate).findByPath(context, path);
+        Map<String, String> pathElements = splitPath(path);
+        return new TableHelper(jdbcTemplate).findByPath(context, pathElements);
     }
 
     @Override
     public Schema findSchemaByPathAndContext(String path, String context) {
-        return new SchemaHelper(jdbcTemplate).findByPath(context, path);
+        Map<String, String> pathElements = splitPath(path);
+        return new SchemaHelper(jdbcTemplate).findByPath(context, pathElements);
     }
-/*
+
     @Override
     public Model findModelByPathAndContext(String path, String context) {
-        return new ModelHelper(jdbcTemplate).findByPath(context, path);
-    }*/
+        Map<String, String> pathElements = splitPath(path);
+        return new ModelHelper(jdbcTemplate).findByPath(context, pathElements);
+    }
 
     @Override
     public Table findTableById(Long id) {
@@ -110,22 +130,11 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public Collection<? extends Item> findChildren(Item item, boolean recursively) {
-        if (recursively) {
-            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH, new HashMap<String, Object>(),
-                    new GlobalItemRowMapper()
-            );
-        } else {
-            Map<String, Object> args = new HashMap<String, Object>();
-            args.put("parentId", item.getId());
-            return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, args,
-                    new GlobalItemRowMapper()
-            );
-        }
-    }
-
-    @Override
     public Collection<? extends Item> findChildren(Item item) {
-        return findChildren(item, false);
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("parentId", item.getId());
+        return jdbcTemplate.query(GLOBAL_FETCH_BY_PATH + AND_PARENT_ID, args,
+                new GlobalItemRowMapper()
+        );
     }
 }

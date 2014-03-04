@@ -66,10 +66,10 @@ public class ParserTest {
         Table targetTable = targetSchema.getTables().get(0);
         Column targetColumn = targetTable.getColumns().get(0);
         assertEquals("c+d", targetColumn.getFormula());
-        List<Long> sources = targetColumn.getSources();
+        List<String> sources = targetColumn.getSources();
         assertEquals(2, sources.size());
-        for (Long sourceRef : sources) {
-            assertThat(sourceRef, anyOf(equalTo(1111L), equalTo(1121L)));
+        for (String sourceRef : sources) {
+            assertThat(sourceRef, anyOf(equalTo("ODS.s.t.c"), equalTo("ODS.s.w.d")));
         }
     }
 

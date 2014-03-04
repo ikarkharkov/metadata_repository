@@ -2,6 +2,7 @@ package com.chystopo.metarepository.parser.model;
 
 import com.chystopo.metarepository.bean.Column;
 import com.chystopo.metarepository.bean.Item;
+import com.chystopo.metarepository.parser.BeanVisitor;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
@@ -45,19 +46,11 @@ public class ColumnBean extends ItemBean {
     }
 
     @Override
-    public Column toEntity(String context, Item parent) {
-        Column column = new Column();
-        column.setContext(context);
-        column.setParent(parent);
-        column.setName(getName());
-        column.setType(getType());
-        column.setFormula(getFormula());
-        List<Long> sources = new ArrayList<Long>();
+    public Column toEntity(BeanVisitor visitor, Item parent) {
+        return visitor.visitColumn(this, parent);
+    }
 
-        for (SourceBean sourceBean : getSources()) {
-            sources.add(sourceBean.getIdref());
-        }
-        column.setSources(sources);
-        return column;
+    public String getPath() {
+        return getName();
     }
 }

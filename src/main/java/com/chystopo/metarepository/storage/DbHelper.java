@@ -33,7 +33,7 @@ public abstract class DbHelper<T extends Item> {
         params.put("name", item.getName());
         params.put("modelId", getModelId(item));
         params.put("schemaId", getSchemaId(item));
-        params.put("tableId", getSchemaId(item));
+        params.put("tableId", getTableId(item));
         params.put("viewId", getViewId(item));
         return params;
     }
@@ -121,15 +121,14 @@ public abstract class DbHelper<T extends Item> {
         return result.get(0);
     }
 
-    public T findByPath(String context, String path) {
-        Map<String, Object> args = new HashMap<String, Object>();
+    public T findByPath(String context, Map<String, String> pathElements) {
+        Map<String, Object> args = new HashMap<String, Object>(pathElements);
         args.put("context", context);
-        args.put("path", path);
-        List<T> result = query(getByFindPublicIdSql(), args, getRowMapper());
+        List<T> result = query(getByFindContextAndPathSql(), args, getRowMapper());
         if (result.isEmpty())
             return null;
         return result.get(0);
     }
 
-    protected abstract String getByFindPublicIdSql();
+    protected abstract String getByFindContextAndPathSql();
 }

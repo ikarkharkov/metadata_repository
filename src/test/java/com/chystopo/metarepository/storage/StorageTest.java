@@ -10,6 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import java.util.Collection;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -20,18 +22,18 @@ public class StorageTest {
     @Autowired
     private IStorage storage;
 
-    private Table prepareTable(String name) {
+    private Table prepareTable(String name, String context) {
         Table table = new Table();
         table.setName(name);
-        table.setContext("unit_test");
+        table.setContext(context);
         return table;
     }
 
-    private Column prepareColumn(Table parentTable, String name, String type) {
+    private Column prepareColumn(Table parentTable, String name, String type, String context) {
         Column column = new Column();
         column.setName(name);
         column.setType(type);
-        column.setContext("unit_test");
+        column.setContext(context);
         column.setParent(parentTable);
         return column;
     }
@@ -39,17 +41,23 @@ public class StorageTest {
     @Test
     public void saveModelWithSchema() {
         Model model = new Model();
+        String context = "unit_test_" + System.currentTimeMillis();
+        model.setContext(context);
         String modelName = "testDB";
         model.setName(modelName);
         String modelType = "database";
         model.setType(modelType);
-        Schema schema = prepareSchema("modelSchema");
+        String schemaName = "modelSchema";
+        Schema schema = prepareSchema(schemaName, context);
+        schema.setContext(context);
         model.getSchemas().add(schema);
-        Table table = prepareTable("modelTable1");
+        String tableName = "modelTable1";
+        Table table = prepareTable(tableName, context);
         schema.getTables().add(table);
-        table.getColumns().add(prepareColumn(table, "modelTest1", "string"));
-        table.getColumns().add(prepareColumn(table, "modelTest2", "int"));
-        table.getColumns().add(prepareColumn(table, "modelTest3", "blob"));
+        String columnName1 = "modelTest1";
+        table.getColumns().add(prepareColumn(table, columnName1, "string", context));
+        table.getColumns().add(prepareColumn(table, "modelTest2", "int", context));
+        table.getColumns().add(prepareColumn(table, "modelTest3", "blob", context));
 
         Model savedModel = storage.saveOrUpdate(model);
 
@@ -61,8 +69,19 @@ public class StorageTest {
         assertEquals(modelName, foundModel.getName());
         assertEquals(modelType, foundModel.getType());
 
-//        Collection<Schema> schemas = (Collection<Schema>) storage.findChildren(foundModel);
-//        assertEquals(1, schemas.size());
+        Column byPath = storage.findColumnByPathAndContext(modelName
+                + "."
+                + schemaName
+                + "."
+                + tableName
+                + "."
+                + columnName1, context);
+        assertNotNull(byPath);
+        assertEquals(columnName1, byPath.getName());
+        assertEquals(context, byPath.getContext());
+
+        Collection<Schema> schemas = (Collection<Schema>) storage.findChildren(foundModel);
+        assertEquals(1, schemas.size());
     }
 
     private void assertChildrenHasCorrectReferenceToParent(Long parentId, Branch savedModel) {
@@ -74,10 +93,10 @@ public class StorageTest {
         }
     }
 
-    private Schema prepareSchema(String name) {
+    private Schema prepareSchema(String name, String context) {
         Schema schema = new Schema();
         schema.setName(name);
-        schema.setContext("unit_test");
+        schema.setContext(context);
         return schema;
     }
 }

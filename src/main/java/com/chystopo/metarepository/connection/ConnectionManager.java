@@ -10,10 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Transactional
@@ -34,16 +31,26 @@ public class ConnectionManager implements IConnectionManager {
     }
 
     private void save(Column column) {
-        Column destinationColumn = columnHelper.findByPath(column.getContext(), "column.path");
+        Map<String, String> destinationPath = extractPath(column);
+        Column destinationColumn = columnHelper.findByPath(column.getContext(), destinationPath);
 
-        for (Long pathId : column.getSources()) {
-            Column sourceColumn = columnHelper.findByPath(column.getContext(), pathId.toString());
+        for (String pathId : column.getSources()) {
+            Map<String, String> sourcePath = extractPath(pathId);
+            Column sourceColumn = columnHelper.findByPath(column.getContext(), sourcePath);
             ConnectionItem item = new ConnectionItem();
             item.setContext(column.getContext());
             item.setDestinationId(destinationColumn.getId());
             item.setSourceId(sourceColumn.getId());
             connectionColumnHelper.save(item);
         }
+    }
+
+    private Map<String, String> extractPath(String pathId) {
+        return new HashMap<String, String>();
+    }
+
+    private Map<String, String> extractPath(Column column) {
+        return new HashMap<String, String>();
     }
 
     @Override

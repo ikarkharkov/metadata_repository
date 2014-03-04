@@ -1,6 +1,7 @@
 package com.chystopo.metarepository.parser.model;
 
 import com.chystopo.metarepository.bean.Item;
+import com.chystopo.metarepository.parser.BeanVisitor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,5 +33,5 @@ public abstract class ItemBean {
         this.name = name;
     }
 
-    public abstract Item toEntity(String context, Item parent);
+    public abstract Item toEntity(BeanVisitor visitor, Item parent);
 }

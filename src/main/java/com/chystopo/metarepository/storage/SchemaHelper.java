@@ -12,7 +12,13 @@ import java.util.Map;
 public class SchemaHelper extends BasicModelHelper<Schema> {
     public static final String BASIC_QUERY = "SELECT be.* FROM basic_entity be INNER JOIN schemas s ON be.id=s.id ";
     private static final String FIND_ONE_SQL = BASIC_QUERY + "WHERE be.id=:id";
-    private static final String FIND_ONE_BY_PUBLIC_ID_SQL = BASIC_QUERY + "WHERE be.context = :context";
+    private static final String FIND_ONE_BY_PATH = "SELECT\n" +
+            "  be1.*\n" +
+            "FROM basic_entity be1\n" +
+            "  JOIN basic_entity be2 ON be2.id = be1.model_id\n" +
+            "WHERE\n" +
+            "  be1.name = :schemaName AND be1.entity_type = 'schema' AND be1.context = :context\n" +
+            "  AND be2.name = :modelName AND be2.entity_type = 'model' AND be2.context = :context";
     public static final String INSERT_SQL = "INSERT INTO schemas(id) VALUES(:id)";
 
     public SchemaHelper(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -55,7 +61,7 @@ public class SchemaHelper extends BasicModelHelper<Schema> {
     }
 
     @Override
-    protected String getByFindPublicIdSql() {
-        return FIND_ONE_BY_PUBLIC_ID_SQL;
+    protected String getByFindContextAndPathSql() {
+        return FIND_ONE_BY_PATH;
     }
 }

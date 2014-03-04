@@ -47,7 +47,7 @@ public class Repository implements IRepository {
 
     @Override
     public Collection<? extends Item> findChildren(Item parent, boolean recursively) {
-        return storage.findChildren(parent, recursively);
+        return storage.findChildren(parent);
     }
 
     @Override

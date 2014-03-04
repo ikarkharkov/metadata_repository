@@ -1,15 +1,14 @@
 package com.chystopo.metarepository.parser.model;
 
 
-import com.chystopo.metarepository.bean.Connection;
 import com.chystopo.metarepository.bean.Item;
 import com.chystopo.metarepository.bean.Mapping;
+import com.chystopo.metarepository.parser.BeanVisitor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
 import java.util.List;
 
 @XmlType(name = "mapping")
@@ -27,16 +26,8 @@ public class MappingBean extends ItemBean {
     }
 
     @Override
-    public Mapping toEntity(String context, Item parent) {
-        Mapping result = new Mapping();
-        result.setContext(context);
-        result.setName(getName());
-
-        List<Connection> connections = new ArrayList<Connection>();
-        for (ConnectionBean connectionBean : getConnections()) {
-            connections.add(connectionBean.toEntity(context, result));
-        }
-        result.setConnections(connections);
+    public Mapping toEntity(BeanVisitor visitor, Item parent) {
+        Mapping result = visitor.visitMapping(this);
 
         return result;
     }
