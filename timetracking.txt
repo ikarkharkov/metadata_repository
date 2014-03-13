@@ -12,3 +12,4 @@ Feb 22 - 1 h      Load DB with 10 000 000 columns. Added indexes.
 Feb 27 - 3 h      Replaced basic_entity path with model_id/schema_id/table_id columns
 Mar 03 - 1 h      Changed SQL queries to use named parameters instead of positional '?' marks
 Mar 04 - 2 h      Improved parser to use path of names for column references instead of inner ids
+Mar 13 - 2 h      Implemented path building and longest unique paths extracting logic
